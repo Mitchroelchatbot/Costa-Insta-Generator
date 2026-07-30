@@ -1,4 +1,13 @@
-# Costa Weekplanning Generator — overdracht v6 (29 juli 2026)
+# Costa Weekplanning Generator — overdracht (t/m v7.7, 30 juli 2026)
+
+## ⚠️ Voor een nieuwe sessie — lees dit eerst
+- **Werkwijze-afspraak met de eigenaar (Mitch): eerst een render/voorbeeld in de chat laten zien, pas na zijn akkoord pushen en deployen.** Uitzondering alleen als hij expliciet "push direct" zegt. Reden: elke Netlify-deploy via de MCP draait een build en kost buildtegoed; GitHub-pushes zijn gratis. Wijzigingen bundelen, één deploy per akkoord.
+- **Code**: github.com/Mitchroelchatbot/Costa-Insta-Generator (`index.html` = de hele app, `docs/` = deze overdracht + collega-instructie). Pushen: HTTPS met een fine-grained token van Mitch (Contents: read/write; hij moet het token opnieuw plakken in een nieuwe sessie — remote-URL: `https://x-access-token:TOKEN@github.com/...`). SSH is geblokkeerd in de cloudomgeving; push met `git -c http.proxy= -c https.proxy=` om de sandboxproxy te omzeilen.
+- **Live**: costainstacreator.netlify.app. Deployen: map met alleen `index.html`, dan Netlify-MCP `deploy-site` (siteId `ab0ceaba-eef3-49fc-bb7e-4283f8e51840`) → geeft een npx-commando → uitvoeren in die map.
+- **Mappen van Mitch** (via de bestanden-brug, desktop-app moet online zijn): `C:\Users\31641\Desktop\Costa AI\06 Costa generator\` en `G:\Mijn Drive\CAFE COSTA\Ontwerpen\Benodigdheden\06 Costa generator\` — na elke goedgekeurde versie beide bijwerken. **Let op: beide mappen staan nog op v7.6** (device was offline bij v7.7).
+- **Testen**: Playwright headless, invoer via échte input-events, canvas via toDataURL exporteren, renders visueel beoordelen (aanpak staat verderop).
+- Nog open bij eigenaar: map "Ontwerpen" op G: hernoemen naar "Ontwerpen Instagram"; TV-video als loop testen op het scherm in de zaak; map "10 Fotos" vullen voor extra cutouts.
+
 
 ## Wat het is
 Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (4:5), story (9:16) én TV-scherm (16:9) dat wekelijkse Instagram-posts (4:5), stories (9:16) én story-video's (9 sec animatie, MP4 via Safari/iPhone) genereert voor Café Costa. **Status: live** op costainstacreator.vercel.app (deploy = dit bestand als `index.html` naar Vercel slepen). Invoerformaat en parsing ongewijzigd sinds v2 — zie `costa-generator-instructie.md`.
@@ -13,6 +22,9 @@ Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (
 5. **Animatie-effecten** (alleen tijdens animatie/video; statische PNG blijft schoon, alles achter `tSec < 900`):
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
+
+## v7.7 — PSV-bijvermelding compact
+- Syntax voor collega's: `psv vs Ajax` (of `psv-Ajax`, of alleen `psv`) ergens in de titel → klein embleem (B*0,55) rechts met "VS AJAX" (rood, Oswald B*0,185) eronder; `psv` verdwijnt uit de titel zodat die de volle breedte houdt. Echte wedstrijdtitels (beginnen met PSV, of "vs"/"wedstrijd") houden het grote embleem + standaardactie. Velden: `ev.psvSide`, `ev.psvVs`; breedtereservering via `badgeScaleF`.
 
 ## v7.6 — zes verbeteringen (goedgekeurd via voorbeeld-eerst-werkwijze)
 **Werkwijze-afspraak eigenaar: eerst renders in de chat laten zien, pas na akkoord pushen/deployen (Netlify-builds kosten buildtegoed; GitHub-pushes zijn gratis).**

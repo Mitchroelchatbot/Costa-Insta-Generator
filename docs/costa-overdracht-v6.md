@@ -14,6 +14,11 @@ Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
 
+## v7.1 — dagletters terug, OPEN-blok E, gebogen pijl (keuzes eigenaar)
+- **Dagletters + datums terug naar Oswald 700** als aparte familie `CostaDay` (const `DAYF`); Lilita bleef voor titels/chips/badge/MORE INFO. Les: fontwissels nooit generiek doorvoeren — de eigenaar wilde alleen de títels anders.
+- **OPEN-blok, indeling E**: tijd groot (B*0,45) met "OPEN VANAF" klein (B*0,165) eronder, beide in Oswald. Gekozen uit 5 mock-indelingen.
+- **Pijl**: massieve driehoek → open contour met gebogen achterkant (quadratische curve, buik B*0,40, lijndikte B*0,062, lineJoin round) die meebuigt met de dagletter. Gekozen uit 5 pijlvarianten + 2 interpretatierondes.
+
 ## v7 — fonts (keuze eigenaar, 5 rondes) + schuifjes
 - **Titelfont: Oswald → Lilita One** (`FONT_TITLE`/familie CostaTitle vervangen; alle TITLEF-plekken schakelen automatisch mee: titels, dagletters, datums, OPEN, chips, MORE INFO). Keuzeproces: 5 vergelijkingsrondes met de eigenaar; Oswald bleef het dichtst bij de originele flyers maar hij wilde ronder/vriendelijker.
 - **DJ-naam: dik en donker** — Shrikhand (`CostaDJ1`) en Bangers (`CostaDJ2`), dropdown `#djfont`: afwisselend per rij (default) of vast één. Host wordt in parseSchedule-uitvoer als `*naam*` gemarkeerd; `drawMixedTitle` kreeg een `scriptFont`-parameter (script-delen 1,35× formaat). Kleur `djInk`: #2B2B2B op witte balken, #FFF8EE op gekleurde. Titel-sierletters (vrijdag/zaterdag) blijven Yellowtail.

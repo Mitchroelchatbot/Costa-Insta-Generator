@@ -14,6 +14,10 @@ Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
 
+## v7.2 — pijl verwijderd (keuze eigenaar)
+- Na twee pijl-iteraties (gebogen open vorm) besloot de eigenaar: **helemaal geen pijl** — de pijlvormige **inkeping in de balk blijft** als vormaccent (variant A). De banner- en flairclip-paden zijn ongewijzigd.
+- **Dagletters raken de balk nooit meer**: breedte wordt gemeten en het font schaalt in stappen van 4px terug tot de rechterrand ≤ 338 blijft (relevant bij ≤3 rijen, waar B en dus de letters het grootst zijn).
+
 ## v7.1 — dagletters terug, OPEN-blok E, gebogen pijl (keuzes eigenaar)
 - **Dagletters + datums terug naar Oswald 700** als aparte familie `CostaDay` (const `DAYF`); Lilita bleef voor titels/chips/badge/MORE INFO. Les: fontwissels nooit generiek doorvoeren — de eigenaar wilde alleen de títels anders.
 - **OPEN-blok, indeling E**: tijd groot (B*0,45) met "OPEN VANAF" klein (B*0,165) eronder, beide in Oswald. Gekozen uit 5 mock-indelingen.

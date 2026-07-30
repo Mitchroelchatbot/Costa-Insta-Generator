@@ -16,7 +16,7 @@ Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (
 
 ## v7.3 — TV-verfijning (rustige loop-beweging, PROGRAMMA, OPEN-breedte)
 - **OPEN-blok groeit naar rechts** als de tijd niet past (oW = max(136, tijdbreedte+30)); lettertype wordt per eis van de eigenaar nooit verkleind. WK-badge schuift automatisch mee (hangt aan oX+oW+SL).
-- **TV-lockup**: "PROGRAMMA" (Lilita, #90EA3C, zwarte schaduw, H*0,052) boven "Deze week" op 0,716H.
+- **TV**: "PROGRAMMA" (Lilita, #90EA3C, zwarte schaduw) gecentreerd in het lege vak ónder de balken (linkerkolom, x=570): positie/formaat dynamisch tussen rowsEnd en MORE INFO (font ≤ H*0,085 en ≤ 62% van de vrije hoogte); verschijnt alleen als er ≥60px vrij is.
 - **Rustige continue beweging op TV** (alleen fmt==='tv', alle frequenties zijn hele golven per 9s-loop dus naadloos): rijen deinen ±3px (2 golven, fase i*0,9), foto 'ademt' ±2,2% (1 golf, cutout onderkant-verankerd; paneel schaalt om z'n middelpunt), sticker pulseert ±5% (3 golven). Post/story bewegen niet extra.
 
 ## v7.2 — pijl verwijderd (keuze eigenaar)

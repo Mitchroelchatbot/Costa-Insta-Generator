@@ -27,7 +27,7 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 
 ## Kiezen en klikken
 
-- **19 templates**: 7 nieuwe échte lege templates (bovenaan in de lijst) + de 12 klassiekers. Standaard **zonder foto**, lekker clean.
+- **18 templates**, gesorteerd op kleur. Allemaal standaard zonder foto — de naam zegt precies wat je krijgt: de kleur, en waar van toepassing + actie of + volle maan/WK. Foto voeg je zelf toe via de foto-dropdown.
 - **Foto-dropdown**: kies uitgeknipte mensen (aanbevolen — die zweven mooi los op de gloed) of een volledige foto. Of upload je eigen foto.
 - **Costa-details**: uit, subtiel of vol (echte palmen — en op vol zitten er toekans in de onderhoeken 🦜).
 - **Drie formaten**: Insta-post (4:5), story (9:16) en **TV-scherm (16:9)** — die laatste met de rijen links en de foto rechts, zoals op de schermen in de zaak.

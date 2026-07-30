@@ -14,6 +14,10 @@ Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
 
+## v7.4 — templatelijst opgeschoond
+- **Dropdown plat en op kleur gesorteerd** (Roze → Magenta → Oranje → Paars → Blauw → Groen), namen minimaal: kleur, of kleur + actie/maan/WK. De oude optgroups ("met ingebakken foto") klopten niet meer: sinds drawEmptyTop tonen de klassieke templates geen foto meer.
+- **'roze' (klassiek) volledig verwijderd** (option + EMBED + THEMES; −0,4 MB): eigenaar vond hem lelijk — het waren twee gecombineerde designs. `nt_roze` blijft de default.
+
 ## v7.3 — TV-verfijning (rustige loop-beweging, PROGRAMMA, OPEN-breedte)
 - **OPEN-blok groeit naar rechts** als de tijd niet past (oW = max(136, tijdbreedte+30)); lettertype wordt per eis van de eigenaar nooit verkleind. WK-badge schuift automatisch mee (hangt aan oX+oW+SL).
 - **TV**: "PROGRAMMA" (Lilita, #90EA3C, zwarte schaduw) gecentreerd in het lege vak ónder de balken (linkerkolom, x=570): positie/formaat dynamisch tussen rowsEnd en MORE INFO (font ≤ H*0,085 en ≤ 62% van de vrije hoogte); verschijnt alleen als er ≥60px vrij is.

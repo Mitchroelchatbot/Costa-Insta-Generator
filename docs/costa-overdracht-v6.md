@@ -14,6 +14,11 @@ Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
 
+## v7.3 — TV-verfijning (rustige loop-beweging, PROGRAMMA, OPEN-breedte)
+- **OPEN-blok groeit naar rechts** als de tijd niet past (oW = max(136, tijdbreedte+30)); lettertype wordt per eis van de eigenaar nooit verkleind. WK-badge schuift automatisch mee (hangt aan oX+oW+SL).
+- **TV-lockup**: "PROGRAMMA" (Lilita, #90EA3C, zwarte schaduw, H*0,052) boven "Deze week" op 0,716H.
+- **Rustige continue beweging op TV** (alleen fmt==='tv', alle frequenties zijn hele golven per 9s-loop dus naadloos): rijen deinen ±3px (2 golven, fase i*0,9), foto 'ademt' ±2,2% (1 golf, cutout onderkant-verankerd; paneel schaalt om z'n middelpunt), sticker pulseert ±5% (3 golven). Post/story bewegen niet extra.
+
 ## v7.2 — pijl verwijderd (keuze eigenaar)
 - Na twee pijl-iteraties (gebogen open vorm) besloot de eigenaar: **helemaal geen pijl** — de pijlvormige **inkeping in de balk blijft** als vormaccent (variant A). De banner- en flairclip-paden zijn ongewijzigd.
 - **Dagletters raken de balk nooit meer**: breedte wordt gemeten en het font schaalt in stappen van 4px terug tot de rechterrand ≤ 338 blijft (relevant bij ≤3 rijen, waar B en dus de letters het grootst zijn).

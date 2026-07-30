@@ -32,7 +32,8 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 - **Costa-details**: uit, subtiel of vol (echte palmen — en op vol zitten er toekans in de onderhoeken 🦜).
 - **Drie formaten**: Insta-post (4:5), story (9:16) en **TV-scherm (16:9)** — die laatste met de rijen links en de foto rechts, zoals op de schermen in de zaak.
 - **Foto positie**: schuifje om de foto naar links of rechts te schuiven tot hij goed staat.
-- **Actie-badge** linksboven voor een extra kreet, en je @handle onderaan.
+- **Sticker linksboven**: dropdown met alle donderdag-acties (3 halen 2 betalen, 3 Stelz €10, 10 shots €10, pitcher €10, Full Moon bucket, WK 2026) én losse eventlogo's (Flügel, XXL Saturday, enz.). Kant-en-klaar, geen typwerk.
+- **Actie-badge tekst** voor een eigen kreet (alleen zichtbaar als er geen sticker gekozen is), en je @handle onderaan.
 
 ## Downloaden
 

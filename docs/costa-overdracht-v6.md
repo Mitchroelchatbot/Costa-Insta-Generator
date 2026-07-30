@@ -14,6 +14,12 @@ Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
 
+## v6.1/v6.2 — Happy Thursday + sticker-dropdown
+- **Happy Thursday** herkend (`ev_happy`, oranje balk `#FF9E1B→#C85A00`, hideLeftover, geen defaultDeal — donderdagactie wisselt, dus via haakjes). Ook typo "thruday" matcht.
+- **Sticker-dropdown** (`#sticker`): 8 kant-en-klare actie-stickers (EMBED `st_*`, uit map "03 Acties kant-en-klaar" + de Acties_transparant-zip) én alle eventlogo's als los element. Getekend NÁ de rijen (ligt er dus overheen, zoals in het WEEK31-voorbeeld); post/story linksboven (185, 0,155H, h 0,165H), TV op (0,505W, 0,44H, h 0,30H) over de rij-uiteinden. Pop-in bij 0,9s. Sticker heeft voorrang op de tekstbadge.
+- `hideLeftover` ook op XXL Saturday (logo bevat de volledige naam).
+- Netlify-deploy kan nu rechtstreeks via de Netlify-MCP (deploy-site op site-id ab0ceaba-…): map met alleen index.html klaarzetten, npx-commando uit de tool-respons draaien.
+
 ## Nieuw in v6 — TV-formaat + beweegbare foto (voorbeeld: WEEK31TV_SCREEN.mp4)
 1. **TV-formaat (1920×1080)**, opgemeten uit het aangeleverde voorbeeld: rijen links in een vaste zone (0,07H–0,90H, pitch-cap 180; de uitlijn-schuiven gelden alleen voor post/story), foto rechts als paneel, "Deze week" (Yellowtail 150px, neongloed in accentkleur) + wit getint CAFÉ COSTA-wordmark rechtsonder op de foto, "MORE INFO: CAFECOSTA.NL" linksonder met typemachine-effect. Badge staat op TV rechts naast de rijen (W*0,55, H*0,42).
    - **Achtergrond**: `drawTvBg()` — donkere tropische basis + gloed in themakleuren + palm-silhouetten + full-colour hoekpalmen; gecachet per thema. Eigen template-upload (liggend) vervangt de achtergrond.

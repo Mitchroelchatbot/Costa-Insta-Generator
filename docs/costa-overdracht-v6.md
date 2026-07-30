@@ -14,6 +14,15 @@ Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
 
+## v7.6 — zes verbeteringen (goedgekeurd via voorbeeld-eerst-werkwijze)
+**Werkwijze-afspraak eigenaar: eerst renders in de chat laten zien, pas na akkoord pushen/deployen (Netlify-builds kosten buildtegoed; GitHub-pushes zijn gratis).**
+- **Game Nights-logo scherp**: nieuwe uitsnede uit `game nights logo met text en kleur (1).png` (1080px) mét volledige "CAFE COSTA'S"-kopregel (crop 70,246–1010,712 — kopregel meenemen loste het afsnijprobleem definitief op), feather 16px, donkere contour (GaussianBlur 6, offset 3,3) voor contrast op witte balken. Per-logo schaal: `logoScale:0.85` op de game-entry (`lh *= st.logoScale||1`).
+- **PSV overal**: `\bpsv\b` in elke titel geeft embleem + rode highlight; `ev.noDefaultDeal` onderdrukt de standaard pitcher-actie tenzij de titel met PSV begint of "vs"/"wedstrijd" bevat.
+- **Sticker-zoom** tot 400%.
+- **TV-achtergrond kleurt mee met het template**: basisgradient + gloed + palmsilhouetten allemaal afgeleid van T.accent/T.accent2 (donkere tinten via `dk(f)`), derde gloed rechtsonder.
+- **Costa-details in 5 standen**: uit/subtiel/medium/vol/extra (lvl 0–4); grootte en dekking schalen lineair, lvl≥2 = extra blad + bloem, lvl≥3 = sterren + hoekpalmen, lvl≥4 = nóg meer + hoekpalmen 15% groter.
+- **Sticky preview** robuuster (align-self:start) — headless gemeten en correct; klachten kwamen vermoedelijk uit browsercache.
+
 ## v7.4 — templatelijst opgeschoond
 - **Dropdown plat en op kleur gesorteerd** (Roze → Magenta → Oranje → Paars → Blauw → Groen), namen minimaal: kleur, of kleur + actie/maan/WK. De oude optgroups ("met ingebakken foto") klopten niet meer: sinds drawEmptyTop tonen de klassieke templates geen foto meer.
 - **'roze' (klassiek) volledig verwijderd** (option + EMBED + THEMES; −0,4 MB): eigenaar vond hem lelijk — het waren twee gecombineerde designs. `nt_roze` blijft de default.

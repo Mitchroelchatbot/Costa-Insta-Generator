@@ -14,6 +14,11 @@ Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
 
+## v7 — fonts (keuze eigenaar, 5 rondes) + schuifjes
+- **Titelfont: Oswald → Lilita One** (`FONT_TITLE`/familie CostaTitle vervangen; alle TITLEF-plekken schakelen automatisch mee: titels, dagletters, datums, OPEN, chips, MORE INFO). Keuzeproces: 5 vergelijkingsrondes met de eigenaar; Oswald bleef het dichtst bij de originele flyers maar hij wilde ronder/vriendelijker.
+- **DJ-naam: dik en donker** — Shrikhand (`CostaDJ1`) en Bangers (`CostaDJ2`), dropdown `#djfont`: afwisselend per rij (default) of vast één. Host wordt in parseSchedule-uitvoer als `*naam*` gemarkeerd; `drawMixedTitle` kreeg een `scriptFont`-parameter (script-delen 1,35× formaat). Kleur `djInk`: #2B2B2B op witte balken, #FFF8EE op gekleurde. Titel-sierletters (vrijdag/zaterdag) blijven Yellowtail.
+- **Schuifjes**: foto links/rechts + omhoog/omlaag + zoom (`#photoX/#photoY/#photoZoom`), zelfde drietal voor de sticker. `coverDraw` kreeg oy- en zoom-parameters (zoom geklemd op ≥1 voor cover-foto's; cutouts zoomen vrij 50–200%). TV-fotopaneel-cache-key bevat alle drie de waarden.
+
 ## v6.1/v6.2 — Happy Thursday + sticker-dropdown
 - **Happy Thursday** herkend (`ev_happy`, oranje balk `#FF9E1B→#C85A00`, hideLeftover, geen defaultDeal — donderdagactie wisselt, dus via haakjes). Ook typo "thruday" matcht.
 - **Sticker-dropdown** (`#sticker`): 8 kant-en-klare actie-stickers (EMBED `st_*`, uit map "03 Acties kant-en-klaar" + de Acties_transparant-zip) én alle eventlogo's als los element. Getekend NÁ de rijen (ligt er dus overheen, zoals in het WEEK31-voorbeeld); post/story linksboven (185, 0,155H, h 0,165H), TV op (0,505W, 0,44H, h 0,30H) over de rij-uiteinden. Pop-in bij 0,9s. Sticker heeft voorrang op de tekstbadge.

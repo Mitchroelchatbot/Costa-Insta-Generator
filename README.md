@@ -14,4 +14,4 @@ Zie [docs/costa-generator-instructie.md](docs/costa-generator-instructie.md) voo
 
 ## Ontwikkeling
 
-Technische details, beslissingen en openstaande punten: [docs/costa-overdracht-v6.md](docs/costa-overdracht-v6.md). Testen gaat headless (Playwright): invoer via echte input-events, canvas exporteren, renders visueel beoordelen — zie de overdracht.
+Technische details, beslissingen en openstaande punten: [docs/costa-overdracht.md](docs/costa-overdracht.md). Testen gaat headless (Playwright): invoer via echte input-events, canvas exporteren, renders visueel beoordelen — zie de overdracht.

@@ -1,16 +1,16 @@
-# Costa Weekplanning Generator — overdracht (t/m v7.7, 30 juli 2026)
+# Costa Weekplanning Generator — overdracht (t/m v7.9.1, 1 augustus 2026)
 
 ## ⚠️ Voor een nieuwe sessie — lees dit eerst
 - **Werkwijze-afspraak met de eigenaar (Mitch): eerst een render/voorbeeld in de chat laten zien, pas na zijn akkoord pushen en deployen.** Uitzondering alleen als hij expliciet "push direct" zegt. Reden: elke Netlify-deploy via de MCP draait een build en kost buildtegoed; GitHub-pushes zijn gratis. Wijzigingen bundelen, één deploy per akkoord.
 - **Code**: github.com/Mitchroelchatbot/Costa-Insta-Generator (`index.html` = de hele app, `docs/` = deze overdracht + collega-instructie). Pushen: HTTPS met een fine-grained token van Mitch (Contents: read/write; hij moet het token opnieuw plakken in een nieuwe sessie — remote-URL: `https://x-access-token:TOKEN@github.com/...`). SSH is geblokkeerd in de cloudomgeving; push met `git -c http.proxy= -c https.proxy=` om de sandboxproxy te omzeilen.
 - **Live**: costainstacreator.netlify.app. Deployen: map met alleen `index.html`, dan Netlify-MCP `deploy-site` (siteId `ab0ceaba-eef3-49fc-bb7e-4283f8e51840`) → geeft een npx-commando → uitvoeren in die map.
-- **Mappen van Mitch** (via de bestanden-brug, desktop-app moet online zijn): `C:\Users\31641\Desktop\Costa AI\06 Costa generator\` en `G:\Mijn Drive\CAFE COSTA\Ontwerpen\Benodigdheden\06 Costa generator\` — na elke goedgekeurde versie beide bijwerken. **Let op: beide mappen staan nog op v7.6** (device was offline bij v7.7).
+- **Mappen van Mitch** (via de bestanden-brug, desktop-app moet online zijn): `C:\Users\31641\Desktop\Costa AI\06 Costa generator\` en `G:\Mijn Drive\CAFE COSTA\Ontwerpen\Benodigdheden\06 Costa generator\` — na elke goedgekeurde versie beide bijwerken. **Let op: beide mappen staan nog op v7.6** (device was offline bij v7.7 t/m v7.9.1) — bijwerken zodra de desktop-app weer online is.
 - **Testen**: Playwright headless, invoer via échte input-events, canvas via toDataURL exporteren, renders visueel beoordelen (aanpak staat verderop).
 - Nog open bij eigenaar: map "Ontwerpen" op G: hernoemen naar "Ontwerpen Instagram"; TV-video als loop testen op het scherm in de zaak; map "10 Fotos" vullen voor extra cutouts.
 
 
 ## Wat het is
-Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (4:5), story (9:16) én TV-scherm (16:9) dat wekelijkse Instagram-posts (4:5), stories (9:16) én story-video's (9 sec animatie, MP4 via Safari/iPhone) genereert voor Café Costa. **Status: live** op costainstacreator.vercel.app (deploy = dit bestand als `index.html` naar Vercel slepen). Invoerformaat en parsing ongewijzigd sinds v2 — zie `costa-generator-instructie.md`.
+Eén zelfstandig HTML-bestand (~14,7 MB) dat wekelijkse Instagram-posts (4:5), stories (9:16), TV-schermen (16:9) en video's (9 sec animatie, MP4 via Safari/iPhone) genereert voor Café Costa. **Status: live op costainstacreator.netlify.app** (deploy via de Netlify-MCP, zie bovenaan). Invoerformaat en parsing ongewijzigd sinds v2 — zie `costa-generator-instructie.md`.
 
 ## Nieuw in v4 (feedbackronde eigenaar)
 1. **Lettertype: Anton → Oswald.** De originele designer-flyers bleken geen Anton te gebruiken; naast elkaar gelegd (WEEK-23/29-INSTA) is het Oswald 700 — smaller, rondere hoeken, minder zakelijk. Ingebedd als `FONT_TITLE` (Oswald 700, familie **CostaTitle**) voor titels/datums/dagletters/OPEN/chips, en `FONT_SUB` (Oswald 500, familie **CostaSub**, geladen met weight 600) voor subregels — de `BARLOW`-const wijst nu eerst naar CostaSub, Barlow blijft als fallback ingebed. Alle `ANTON`-verwijzingen heten nu `TITLEF`.
@@ -22,6 +22,72 @@ Eén zelfstandig HTML-bestand (`costa-generator.html`, ~14 MB) voor Insta-post (
 5. **Animatie-effecten** (alleen tijdens animatie/video; statische PNG blijft schoon, alles achter `tSec < 900`):
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
+
+## v7.9.1 — twee correcties op v7.9
+- **TV + volledige foto: OPEN-blok liep 143px de foto in.** `xRtBase = Math.min(850, W - 40 - SL - oWShared - 16)` leverde op TV (W=1920) altijd 850 op, terwijl het fotopaneel al bij `W - round(W*0.48)` = 998 begint en het blok inclusief schuinte tot 1141 doorliep. (Ook vóór v7.9 was er al 38px overlap; die formule maakte het zichtbaar erger.) Nu bepaalt een `rightLimit` de rechtergrens: bij een rechthoekige foto op TV `W - round(W*0.48) - 12`, anders `W - 40`. Cutouts zijn transparant en staan gecentreerd op 0,73W, dus die houden de brede balken (xRt 850); alleen bij een volledige foto krimpen ze naar ~695.
+- **Titelgrootte-schuif deed niets boven ~105% op rijen mét eventlogo**: `Math.min(B*0.38*tScale, B*0.40)` kapte de schaal af. De cap is weg; `fitFont` begrenst al op breedte.
+
+## v7.9 — leesbaarheid: dagblok, titelfont, tekst- en labelregelaars
+Aanleiding: de eigenaar legde een gegenereerde week naast een originele designerflyer (WEEK31) en
+vond het origineel duidelijk beter leesbaar. Alles hieronder is opgemeten, niet op gevoel bepaald.
+
+**Dagblok (grootste winst).** De dagletters en de datum stonden los op de achtergrond: een 6px
+contour in `T.accent` met `rgba(0,0,0,0.25)` als vulling. Daardoor hing het contrast volledig af van
+het gekozen template. Gemeten over alle 18 templates lag de slechtste op 3,41:1 en de default
+`nt_roze` op 3,90:1. Nu staat er een massief accentblok (x 60→330 met pijlpunt naar 358, 14px
+slash-gap voor de inkeping van de banner) met datum en dagletters in `T.openInk` — dezelfde inkt die
+al op het OPEN-blok stond. Slechtste template nu 4,52:1, en de letters zijn massief in plaats van
+contour, dus de waargenomen streekdikte gaat ~4x omhoog. Dagletters van `B*1.5` outline naar
+`B*1.30` massief (bij 1,45 steken ze boven het blok uit).
+
+**`openInk` van `stelzp` en `moon`** van `#FFFFFF` naar `#14082A`: die twee stonden wit op een
+lichtpaars accent en werden na bovenstaande wijziging de slechtste van het stel (4,23 en 3,61) —
+nu 4,52 en 5,30.
+
+**Staffeling uit.** `stagger` op nullen. In WEEK31 lijnen alle balken rechts uit binnen 8px
+(gemeten 815/811/807); de staffel liet ook de OPEN-blokken meeschuiven omdat die aan `xRt` hangen.
+Oude waarden staan als comment in de code.
+
+**Flair-alpha omgedraaid.** `base` was 0,5 op gekleurde balken en 1 op witte. Precies verkeerd om:
+de witte balken dragen zwarte tekst en kregen de meeste ruis. Nu 1 op gekleurd, 0,45 op wit.
+
+**Titelfont terug naar Oswald 700.** `TITLEF` wijst naar familie `CostaDay` (al ingebed voor
+dagletters/OPEN). De v4-conclusie klopte: de designerflyers zijn Oswald 700. Lilita One uit v7 was
+ronder en breder en las kleiner. Titel `B*0.37 → B*0.46`, subregel `B*0.24 → B*0.30`. Opgemeten
+kapitaalhoogte designer 0,31×B tegen 0,245×B in de generator — dat verschil is hiermee weg.
+
+**Balkbreedte afgeleid i.p.v. hardgecodeerd.** `oW` wordt nu één keer voor alle rijen bepaald
+(alle OPEN-blokken exact even breed, dus uitlijning aan beide kanten), en
+`xRtBase = Math.min(850, W - 40 - SL - oWShared - 16)` houdt een vaste rechtermarge van 40px.
+Effect: 2 rijen 790 (ongewijzigd), 4 rijen 823, 5 rijen 836 — titelbreedte van 375 naar 408/421px.
+Bewust niet hardgecodeerd op 850: bij 1–3 rijen is `B` groot, dus `SL` ook, en dan schiet het
+OPEN-blok van het doek.
+
+**Verticale uitlijning van het tekstblok.** De titel stond vast op `y + B*0.44`; bij een grote titel
+raakte hij de bovenrand (gemeten 0px marge bij 120%). `drawMixedTitle` heeft een `measureOnly`-stand
+gekregen die `{s, cap}` teruggeeft; de rij meet titel + subregel, centreert het blok en houdt
+minimaal 11% van `B` vrij boven en onder. Past het niet, dan schalen beide regels evenredig terug.
+Bovenmarge nu 8–9px over het hele schuifbereik 100–130%.
+
+**Tekstschuifjes** (`#titleSize`, `#subSize`, `#textX`, `#textY`): titel- en DJ-naamgrootte
+70–130%, tekst −40..+80px horizontaal en ±18px verticaal. Let op: bij een lange titel is de
+*breedte* de grens, niet de basisgrootte — `drawMixedTitle` krimpt tot het past, dus omhoog schuiven
+doet daar niets. Bij de normale korte titels ("Bangers Only", "Neon Party") werkt het hele bereik.
+
+**Actie-label altijd volledig zichtbaar.** Het gele label werd midden in de rijenlus getekend en kon
+dus onder een volgend dagblok of eventlogo verdwijnen. Het gaat nu via `chipQueue` naar een laatste
+tekenlaag na de rijenloop, met een harde clamp op de halve breedte inclusief schuinte en rotatie, en
+eigen schuifjes `#dealZoom` (60–180%), `#dealX` (−260..+120) en `#dealY` (−70..+40). De maximale
+labelbreedte volgt nu de balk (`Math.min(430, xRt - 400)`) in plaats van een vaste 260, dus lange
+acties krimpen niet meer naar 13px.
+
+**Teruggedraaid: `bandBottom` van 70 naar 76.** Leek logisch (hogere balken), maar de rijen liepen
+dan over de "PROGRAMMA" die in de template-afbeeldingen is ingebakken. Naar boven zit de
+Stelz-actie in de weg. De 36/70-defaults zijn op het artwork afgesteld — laat staan. Rijen groter
+maken kan alleen als de band per template uit het artwork wordt afgeleid; dat is een apart project.
+
+Getest: Playwright headless op 2, 4 en 5 rijen, met en zonder eventlogo, met PSV-bijvermelding, met
+de langste actietekst, en op de uitersten van alle schuifjes. Nul console-errors.
 
 ## v7.7 — PSV-bijvermelding compact
 - Syntax voor collega's: `psv vs Ajax` (of `psv-Ajax`, of alleen `psv`) ergens in de titel → klein embleem (B*0,55) rechts met "VS AJAX" (rood, Oswald B*0,185) eronder; `psv` verdwijnt uit de titel zodat die de volle breedte houdt. Echte wedstrijdtitels (beginnen met PSV, of "vs"/"wedstrijd") houden het grote embleem + standaardactie. Velden: `ev.psvSide`, `ev.psvVs`; breedtereservering via `badgeScaleF`.
@@ -90,13 +156,13 @@ Canvas 1080×1350/1920, geometrie uit originele flyers (banner 91/rij 120, pijl-
 Playwright headless: invoer via echte `input`-events (NaN-regressieroute v2), exports voor post leeg/foto, story leeg, en losse animatieframes via `render(1.25)` / `render(7.55)` / `render(8.9)`; daarna visueel beoordelen. Fontcheck via `document.fonts.check('76px CostaTitle')`. Nul console-errors.
 
 ## Openstaand (op volgorde van impact)
-2. **Nieuwe events** met origineel logo in map 01/02: Happy Thursday, Neon Party, Student Night, Matchday, Photobooth, Pitcher, Pasen/Pinksteren.
-3. **Transparante actie-overlays inbouwen** (map `Acties_transparant` in de templates-zip): als kiesbare badge-laag (10 shots, Stelz met/zonder badge, WK 2026).
-3b. **Map "10 Fotos" / meer cutouts**: nieuwe uitgeknipte mensen aanleveren als `cutouts_batch2`; zelfde pipeline (alpha-bbox, WebP).
-4. Fontlicentie designer checken (map 05); huidige Oswald is OFL (gratis, geen risico).
-5. Netlify-tegoed of definitief Vercel.
+1. **Nieuwe events** met origineel logo in map 01/02: Neon Party, Student Night, Matchday, Photobooth, Pitcher, Pasen/Pinksteren (Happy Thursday zit er al in sinds v6.1).
+2. **Transparante actie-overlays inbouwen** (map `Acties_transparant` in de templates-zip): als kiesbare badge-laag (10 shots, Stelz met/zonder badge, WK 2026).
+3. **Map "10 Fotos" / meer cutouts**: nieuwe uitgeknipte mensen aanleveren als `cutouts_batch2`; zelfde pipeline (alpha-bbox, WebP).
+4. **Rijenband per template uit het artwork afleiden** — dan pas kunnen de balken groter (zie de teruggedraaide `bandBottom` hieronder bij v7.9).
+5. Fontlicentie designer checken (map 05); huidige Oswald is OFL (gratis, geen risico).
 
-## Bestanden
-- `costa-generator.html` — actuele v4 (deploy: als `index.html` naar Vercel).
-- `costa-generator-instructie.md` — bijgewerkt (fotokiezer + animatie).
-- `costa-overdracht-v6.md` — dit document.
+## Bestanden in de repo
+- `index.html` — de volledige app (dit is wat gedeployed wordt).
+- `docs/costa-overdracht.md` — dit document.
+- `docs/costa-generator-instructie.md` — korte gebruiksuitleg voor collega's.

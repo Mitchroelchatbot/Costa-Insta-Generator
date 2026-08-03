@@ -1,4 +1,4 @@
-# Costa Weekplanning Generator — overdracht (t/m v7.9.1, 1 augustus 2026)
+# Costa Weekplanning Generator — overdracht (t/m v7.11, 2 augustus 2026)
 
 ## ⚠️ Voor een nieuwe sessie — lees dit eerst
 - **Werkwijze-afspraak met de eigenaar (Mitch): eerst een render/voorbeeld in de chat laten zien, pas na zijn akkoord pushen en deployen.** Uitzondering alleen als hij expliciet "push direct" zegt. Reden: elke Netlify-deploy via de MCP draait een build en kost buildtegoed; GitHub-pushes zijn gratis. Wijzigingen bundelen, één deploy per akkoord.
@@ -22,6 +22,29 @@ Eén zelfstandig HTML-bestand (~14,7 MB) dat wekelijkse Instagram-posts (4:5), s
 5. **Animatie-effecten** (alleen tijdens animatie/video; statische PNG blijft schoon, alles achter `tSec < 900`):
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
+
+## v7.11 — leesbaarheidsronde naar de designerposter (WEEK 5-8, 5 rijen)
+Aanleiding: de eigenaar leverde een nieuwe designerflyer met 5 rijen. Alles opgemeten.
+
+**Balken groter.** Gemeten op de referentie: bannerhoogte 91, rijafstand 120, band 31,3%–73,6%. Onze band stond op 36–70%. Nu 31–74% → bij 4 rijen B=110, bij 5 rijen B≈88. `B/pitch` blijft 0,76 (klopte al exact).
+
+**Bolle hoeken.** `roundPoly(ctx, pts, r)` — polygoon met afgeronde hoeken via arcTo, radius per hoek geklemd op de helft van de kortste aanliggende zijde (zo blijven pijlpunt en inkeping herkenbaar). Toegepast op dagblok, banner, flair-clip, OPEN-blok en het gele label. Radius 0,16×B, gemeten op de referentie.
+
+**PROGRAMMA afdekken.** De band kon niet voorbij 70% omdat "PROGRAMMA" in de template-afbeeldingen zit (nt_roze vanaf 71,0%). `findProgBand()` zoekt de groene tekst per template op een verkleinde kopie (63–80% hoogte, alleen als de band < 7,5% hoog is, dus geen palmblad) en cachet dat. `coverStrip()` dekt af door de bronrij bóven en ónder de strook over de hele strook uit te rekken en in elkaar over te vloeien (plus uitvloeiende randen) — een vlakke kleurband zou zichtbaar zijn op de gloed. Alleen als de onderste balk er daadwerkelijk op valt; bij 2–3 rijen blijft PROGRAMMA staan.
+
+**Dagblok compacter** (330→268, punt 358→296): levert 62px extra titelbreedte. Nodig omdat lange titels breedte-begrensd zijn — het lettertype opschroeven had geen effect (gemeten: vraagt 57px, krijgt 33px).
+
+**DJ-naam.** `**naam**` = headliner: groter en desnoods over twee regels (maat geklemd op B*0,34, want dit script-font heeft stokken en staarten die anders op de regel eronder vallen). Gewone DJ-namen: vaste maat `min(B*0,23, titel*0,80)` — dus op élke rij even groot. Stond eerst op titelgrootte×factor, waardoor een rij mét badge (PSV) een kleinere titel én dus een kleinere DJ-naam kreeg; vrijdag en zaterdag verschilden daardoor zichtbaar.
+
+**OPEN-blok.** Tekst zat tegen de randen: tijd B*0,45→0,40, label B*0,165→0,15, en elke regel wordt gecentreerd op de breedte op ZIJN eigen hoogte (`cxAt(f)`) — het blok is schuin, dus de onderste regel schoof anders tegen de linkerrand. Blokbreedte volgt nu de breedste van beide regels.
+
+**Logo's.** Game Nights opnieuw uitgesneden zónder donkere contour (die was voor de witte balk; de balk is nu paars #662384 zoals op de designerposter) en op `logoScale:1.15`. Stelz'n op `logoScale:1.30` — mag bewust over de balk heen vallen.
+
+**PSV.** Herkenning kijkt nu ook in de 'met'-tekst (zo schrijft de eigenaar het). Een los tijdstip daar wordt de aftraptijd: embleem + "VS CLUB" + "AFTRAP 20:00" klein eronder, alles binnen de balk.
+
+**Actie-label** wijkt naar onder de balk zodra de rij een headliner over twee regels heeft.
+
+Getest headless op 4, 5 en 6 rijen, met/zonder logo, PSV met en zonder aftraptijd. Nul console-errors.
 
 ## v7.9.1 — twee correcties op v7.9
 - **TV + volledige foto: OPEN-blok liep 143px de foto in.** `xRtBase = Math.min(850, W - 40 - SL - oWShared - 16)` leverde op TV (W=1920) altijd 850 op, terwijl het fotopaneel al bij `W - round(W*0.48)` = 998 begint en het blok inclusief schuinte tot 1141 doorliep. (Ook vóór v7.9 was er al 38px overlap; die formule maakte het zichtbaar erger.) Nu bepaalt een `rightLimit` de rechtergrens: bij een rechthoekige foto op TV `W - round(W*0.48) - 12`, anders `W - 40`. Cutouts zijn transparant en staan gecentreerd op 0,73W, dus die houden de brede balken (xRt 850); alleen bij een volledige foto krimpen ze naar ~695.

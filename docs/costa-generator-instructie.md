@@ -23,6 +23,9 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 - **Kent onze standaardacties uit z'n hoofd.** Stelz'n → 3 Stelz €10. Tijd Machine → pitcher bier €10. Rocket Shot → 10 rocketshots €10. PSV → pitcher bier €20. Andere actie? Zet 'm tussen haakjes en hij pakt die.
 - **Tijden kleuren mee** en springen netjes naar een eigen regel. Zelfs "1430" zonder dubbele punt snapt hij.
 - Zet een woord tussen sterretjes voor **sierletters**: Thank God It's *Friday*.
+- **Headliner-DJ?** Zet 'm tussen dubbele sterretjes: `met **DJ Jordy Graat**` — groter, en breekt vanzelf over twee regels.
+- **Zelf een regel breken** in de DJ-naam: `met Mister // Costa`.
+- **PSV erbij?** Typ `PSV vs Excelsior` ergens achter "met", eventueel met de aftraptijd erbij: `met DJ Riva Soul 20:00 PSV vs Excelsior`.
 - Plak je planning gerust vanuit **WhatsApp** — rare tekens ruimt hij zelf op.
 
 ## Kiezen en klikken

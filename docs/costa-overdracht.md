@@ -1,4 +1,4 @@
-# Costa Weekplanning Generator — overdracht (t/m v7.11, 2 augustus 2026)
+# Costa Weekplanning Generator — overdracht (t/m v7.12, 4 augustus 2026)
 
 ## ⚠️ Voor een nieuwe sessie — lees dit eerst
 - **Werkwijze-afspraak met de eigenaar (Mitch): eerst een render/voorbeeld in de chat laten zien, pas na zijn akkoord pushen en deployen.** Uitzondering alleen als hij expliciet "push direct" zegt. Reden: elke Netlify-deploy via de MCP draait een build en kost buildtegoed; GitHub-pushes zijn gratis. Wijzigingen bundelen, één deploy per akkoord.
@@ -22,6 +22,20 @@ Eén zelfstandig HTML-bestand (~14,7 MB) dat wekelijkse Instagram-posts (4:5), s
 5. **Animatie-effecten** (alleen tijdens animatie/video; statische PNG blijft schoon, alles achter `tSec < 900`):
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
+
+## v7.12 — uitlijning, gestapelde DJ-naam, PSV-blok
+
+**Dagletters echt gecentreerd.** Canvas' `textBaseline='middle'` rekent met de em-box (inclusief staartruimte), waardoor hoofdletters optisch te laag stonden. Nu `alphabetic` met baseline op `y + B/2 + cap/2`, cap = 0,72×fontgrootte.
+
+**`//` in de DJ-naam = zelfgekozen regelovergang** (`met Mister // Costa`), naast de bestaande `**headliner**` die automatisch breekt. Beide regels krijgen dezelfde maat: de smalste bepaalt.
+
+**Tekstbreedte volgt de schuine rechterrand.** `wAt(f) = xRt + SL*f - 20 - textX` — de balk loopt schuin, dus lager in de balk is er tot ~70px meer ruimte. Werd eerder met de smalste bovenrand gerekend. Effect: "MISTER" van 23 naar 29px zónder het logo te verkleinen (dat bleef op 285px; een eerdere poging om het logo terug te schalen naar 0,46 werd door de eigenaar afgewezen).
+
+**PSV-blok**: embleem van 0,55B naar 0,90B en bewust over de bovenrand (`by = y - B*0.16`); wedstrijdregel als één tekst ("20:00 VS EXCELSIOR", font B*0,15) onderaan de balk op `y + B*0.93`, dus los van de hoogte van de DJ-naam. `badgeW` wordt gemeten (max van embleembreedte en regelbreedte) i.p.v. vast gereserveerd — een korte club laat de titel meer ruimte. Aftraptijd komt uit een los tijdstip in de 'met'-tekst.
+
+**PROGRAMMA-detectie vervangen door een opgemeten tabel** (`PROG_BAND`). De runtime-detectie zocht groene tekst, maar dat woord heeft per template een andere kleur (paars = geel, groen = oranje); kleur-onafhankelijk maken maakte het juist slechter, want de gloed matcht dan ook. Alle 18 templates + story zijn één keer offline opgemeten via randdichtheid. Onbekend template = geen afdekking (veilige default).
+
+**Teruggedraaid: titels op alle rijen even groot.** Was gebouwd (kleinste rij bepaalt de maat) maar de eigenaar vond het slechter: één lange titel maakte de hele week kleiner. Korte titels benutten hun ruimte weer.
 
 ## v7.11 — leesbaarheidsronde naar de designerposter (WEEK 5-8, 5 rijen)
 Aanleiding: de eigenaar leverde een nieuwe designerflyer met 5 rijen. Alles opgemeten.

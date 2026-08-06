@@ -25,7 +25,7 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 - Zet een woord tussen sterretjes voor **sierletters**: Thank God It's *Friday*.
 - **Headliner-DJ?** Zet 'm tussen dubbele sterretjes: `met **DJ Jordy Graat**` — groter, en breekt vanzelf over twee regels.
 - **Zelf een regel breken** in de DJ-naam: `met Mister // Costa`.
-- **PSV erbij?** Typ `PSV vs Excelsior` ergens achter "met", eventueel met de aftraptijd erbij: `met DJ Riva Soul 20:00 PSV vs Excelsior`.
+- **PSV erbij?** Typ het achter "met", in welke volgorde je wilt: `met DJ Riva Soul PSV 20:00 vs Excelsior` of `PSV vs Excelsior 20:00` — hij vist de tijd en de tegenstander er zelf uit.
 - Plak je planning gerust vanuit **WhatsApp** — rare tekens ruimt hij zelf op.
 
 ## Kiezen en klikken

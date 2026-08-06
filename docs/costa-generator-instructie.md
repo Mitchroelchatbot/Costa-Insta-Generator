@@ -33,7 +33,7 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 - **18 templates**, gesorteerd op kleur. Allemaal standaard zonder foto — de naam zegt precies wat je krijgt: de kleur, en waar van toepassing + actie of + volle maan/WK. Foto voeg je zelf toe via de foto-dropdown.
 - **Foto-dropdown**: kies uitgeknipte mensen (aanbevolen — die zweven mooi los op de gloed) of een volledige foto. Of upload je eigen foto.
 - **Costa-details** in vijf standen: uit, subtiel, medium, vol of extra vol (echte palmen — vanaf vol zitten er toekans in de onderhoeken 🦜).
-- **Drie formaten**: Insta-post (4:5), story (9:16) en **TV-scherm (16:9)** — die laatste met de rijen links en de foto rechts, zoals op de schermen in de zaak.
+- **Drie formaten**: Insta-post (4:5), story (9:16) en **TV-scherm (16:9)** — die laatste met de rijen links en de foto rechts, zoals op de schermen in de zaak. Alle drie kleuren mee met het gekozen template.
 - **Foto schuiven en zoomen**: schuifjes voor links/rechts, omhoog/omlaag en zoom — zet de foto precies zoals jij wil. Zelfde schuifjes voor de sticker.
 - **Sticker linksboven**: dropdown met alle donderdag-acties (3 halen 2 betalen, 3 Stelz €10, 10 shots €10, pitcher €10, Full Moon bucket, WK 2026) én losse eventlogo's (Flügel, XXL Saturday, enz.). Kant-en-klaar, geen typwerk — en met eigen schuifjes te verplaatsen en te schalen.
 - **Actie-badge tekst** voor een eigen kreet (alleen zichtbaar als er geen sticker gekozen is), en je @handle onderaan.

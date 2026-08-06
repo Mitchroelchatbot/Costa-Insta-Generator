@@ -1,4 +1,4 @@
-# Costa Weekplanning Generator — overdracht (t/m v7.13, 4 augustus 2026)
+# Costa Weekplanning Generator — overdracht (t/m v7.14, 4 augustus 2026)
 
 ## ⚠️ Voor een nieuwe sessie — lees dit eerst
 - **Werkwijze-afspraak met de eigenaar (Mitch): eerst een render/voorbeeld in de chat laten zien, pas na zijn akkoord pushen en deployen.** Uitzondering alleen als hij expliciet "push direct" zegt. Reden: elke Netlify-deploy via de MCP draait een build en kost buildtegoed; GitHub-pushes zijn gratis. Wijzigingen bundelen, één deploy per akkoord.
@@ -22,6 +22,17 @@ Eén zelfstandig HTML-bestand (~14,7 MB) dat wekelijkse Instagram-posts (4:5), s
 5. **Animatie-effecten** (alleen tijdens animatie/video; statische PNG blijft schoon, alles achter `tSec < 900`):
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
+
+## v7.14 — story-achtergrond volgt het gekozen template
+Klacht: bij story kleurde de achtergrond niet mee met het template (balken wel). Oorzaak: er is **één** designer-story (roze, 1080×1920) tegenover 18 posters; `IMGS.story` werd altijd gebruikt. De designer maakt geen story-versies, dus die route was dood.
+
+Oplossing: `buildStoryBg(key, img, W, H)` bouwt de story-achtergrond op uit het **post-template van de gekozen kleur**. Bovenkant (0–58%) en onderblok (70–100%: PROGRAMMA, Deze week, logo, toekans, palmen) worden 1-op-1 overgenomen; alleen de egale gloed daartussen (58–70%) wordt uitgerekt tot de resterende hoogte. Die zone is vlak, dus het rekken is onzichtbaar, en de snijpunten zijn continu in de bron (geen sprong in de inhoud, alleen in de verticale schaal). Gecachet per template+formaat.
+
+Gevolg: elk nieuw template heeft automatisch een bijpassende story. `IMGS.story` blijft alleen nog fallback. De PROGRAMMA-band voor story wordt vanaf de ónderkant teruggerekend, omdat het onderblok 1-op-1 is overgenomen.
+
+Eerder geprobeerd en verworpen: de roze story omkleuren met een 'color'-blend. Werkte voor de middenzone, maar liet het onderblok (toekans, logo, Deze week) roze — of maakte de toekans oranje/groen als je het wél meenam.
+
+Getest: 18 templates × 3 formaten, nul console-errors.
 
 ## v7.13 — PSV-invoer volgordevrij
 De eigenaar schrijft `met DJ Riva Soul PSV 20:00 vs excelsior`. De oude regex zocht "vs" pál achter `psv`, dus met de tijd ertussen bleef de tegenstander in de DJ-naam staan. Nu geldt: **alles vanaf het woord `psv` tot het eind van de met-tekst is de wedstrijd**; daaruit worden tijd en tegenstander los gevist (tijd eerst weggehaald, anders leest "vs Excelsior 20:00" de tijd als deel van de clubnaam). Een tijd die vóór `psv` staat (`+ 20:00 PSV vs Fortuna`) wordt uit het staartje van het voorstuk gehaald. Clubnamen tot twee woorden.

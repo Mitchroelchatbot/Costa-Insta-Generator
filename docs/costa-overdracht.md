@@ -1,4 +1,4 @@
-# Costa Weekplanning Generator — overdracht (t/m v7.14, 4 augustus 2026)
+# Costa Weekplanning Generator — overdracht (t/m v7.15, 6 augustus 2026)
 
 ## ⚠️ Voor een nieuwe sessie — lees dit eerst
 - **Werkwijze-afspraak met de eigenaar (Mitch): eerst een render/voorbeeld in de chat laten zien, pas na zijn akkoord pushen en deployen.** Uitzondering alleen als hij expliciet "push direct" zegt. Reden: elke Netlify-deploy via de MCP draait een build en kost buildtegoed; GitHub-pushes zijn gratis. Wijzigingen bundelen, één deploy per akkoord.
@@ -22,6 +22,18 @@ Eén zelfstandig HTML-bestand (~14,7 MB) dat wekelijkse Instagram-posts (4:5), s
 5. **Animatie-effecten** (alleen tijdens animatie/video; statische PNG blijft schoon, alles achter `tSec < 900`):
    - "Deze week"-zone: **neon-opstartflikker** (stotterpatroon t<1,7 s) en daarna rustige ademhaling, als 'lighter'-radial op ~0,795H (post) / 0,838H (story).
    - **Finale**: vanaf t=7 dimt het beeld (max 0,55), vanaf t=7,9 licht het COSTA-logo op (warme gloed op ~0,908H/0,923H); video eindigt helder op het logo.
+
+## v7.15 — PSV-blok: leesbaarheid en plaatsing
+**Wedstrijdregel leesbaarder.** Was `#E30613` op een witte balk = 4,7:1 contrast, op B*0,15. Nu `#B3040F` op B*0,20 = 6,9:1 (op gekleurde balken wit). Gekozen uit drie varianten (rode pil met witte tekst / groter donkerrood / tijd als losse pil); de eigenaar koos de middelste.
+
+**Embleem zo ver mogelijk naar rechts.** `psvEmbRight = xRt + 16 + SL*0.29 - 4`: de linkerrand van het OPEN-blok op de hoogte waar het embleem het breedst is. Schaalt mee met B, dus klopt ook bij 5–6 rijen. Het embleem wordt **ná het OPEN-blok** getekend (via `psvDraw`), zodat een klein overlapje er bovenop ligt in plaats van dat de gouden ring wordt afgesneden — daardoor kan het verder naar rechts dan wanneer het eronder zou liggen.
+*Leergeld: eerst een vaste clamp op +18px gebruikt om overlap bij 5 rijen te voorkomen; die trok de door de eigenaar gekozen positie stilzwijgend terug naar links. Een grens die niet meeschaalt met B is hier altijd fout.*
+
+**Wedstrijdregel volgt de schuinte**: rechts uitgelijnd op `xRt + SL*0.84 - 10`, baseline `y + B*0.90`. Niet verder naar rechts of lager: de afgeronde onderhoek (radius 0,16B) snijdt de balk daar al naar binnen, en dan valt de laatste letter buiten het wit.
+
+**`badgeW` volgt de werkelijke uiterst-linkse punt** van embleem óf regel, i.p.v. het maximum van beide breedtes. Scheelt ~58px titelbreedte.
+
+**Gemeten grens voor lange titels** (bij B=114, gevraagde titelmaat 59px): "ZWOELE ZOMER NACHTEN" (20 tekens) krijgt 31px mét PSV-blok en 43px zónder; "ZWOELE ZOMER" (12 tekens) krijgt 53px mét. De titel is dus vooral door zijn eigen lengte begrensd, niet door het PSV-blok — verdere lay-outwinst is marginaal. Advies aan de eigenaar: kortere titel of `|`-splitsing.
 
 ## v7.14 — story-achtergrond volgt het gekozen template
 Klacht: bij story kleurde de achtergrond niet mee met het template (balken wel). Oorzaak: er is **één** designer-story (roze, 1080×1920) tegenover 18 posters; `IMGS.story` werd altijd gebruikt. De designer maakt geen story-versies, dus die route was dood.

@@ -1005,12 +1005,14 @@ function render(tSec){
     const HL_D = 0.85;
     const hlT0 = 3.4 + i * (n > 1 ? (3.2 - HL_D) / (n - 1) : 0);
     const hlU = (tSec - hlT0) / HL_D;
-    const hlS = (tSec < 900 && fmt !== 'tv' && hlU > 0 && hlU < 1) ? Math.sin(hlU*Math.PI) : 0;
+    const hlS = (tSec < 900 && hlU > 0 && hlU < 1) ? Math.sin(hlU*Math.PI) : 0;
 
     ctx.save();
     ctx.translate(-150*(1-e), 0);
     if(hlS > 0){
-      const hcx = W*0.5, hcy = y + B/2, hsc = 1 + 0.025*hlS;
+      // v7.17: schaal om het midden van de RIJ, niet van het doek -- op TV staan de
+      // balken links, dan trekt een doekmidden de rij scheef.
+      const hcx = (60 + xRtBase + SL + oWShared + 16)/2, hcy = y + B/2, hsc = 1 + 0.025*hlS;
       ctx.translate(hcx, hcy); ctx.scale(hsc, hsc); ctx.translate(-hcx, -hcy);
       ctx.translate(6*hlS, 0);
     }

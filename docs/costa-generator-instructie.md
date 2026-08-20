@@ -2,7 +2,7 @@
 
 Wekelijkse Insta-posts en stories in Costa-huisstijl, in 30 seconden, zonder designer. Plak je weekplanning, en de generator bouwt er live een strakke flyer van. Templates, logo's, foto's en lettertypes zitten er allemaal in — jij hoeft alleen te typen.
 
-**Link:** costainstacreator.vercel.app (werkt op telefoon én laptop, niks installeren)
+**Link:** costainstacreator.netlify.app (werkt op telefoon én laptop, niks installeren)
 
 ## Zo werkt het
 
@@ -32,9 +32,11 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 
 - **18 templates**, gesorteerd op kleur. Allemaal standaard zonder foto — de naam zegt precies wat je krijgt: de kleur, en waar van toepassing + actie of + volle maan/WK. Foto voeg je zelf toe via de foto-dropdown.
 - **Foto-dropdown**: kies uitgeknipte mensen (aanbevolen — die zweven mooi los op de gloed) of een volledige foto. Of upload je eigen foto.
+- **Nieuwe events herkend aan één woord:** typ **Purple** of **Fontys** voor een paarse balk met het Fontys-logo, **Flügel** voor de gele balk met het doosje en "hele doos €60,-" erbij, en **International Student Night** voor de roze-oranje balk met het telefoontje.
 - **Costa-details** in vijf standen: uit, subtiel, medium, vol of extra vol (echte palmen — vanaf vol zitten er toekans in de onderhoeken 🦜).
 - **Drie formaten**: Insta-post (4:5), story (9:16) en **TV-scherm (16:9)** — die laatste met de rijen links en de foto rechts, zoals op de schermen in de zaak. Alle drie kleuren mee met het gekozen template.
 - **Foto schuiven en zoomen**: schuifjes voor links/rechts, omhoog/omlaag en zoom — zet de foto precies zoals jij wil. Zelfde schuifjes voor de sticker.
+- **Twee stickers tegelijk**: elk met eigen schuifjes voor plek en grootte, en een eigen prijsveld eronder (bv. "€ 12,50" of "HELE WEEKEND € 60,-"). Nieuw in de lijst: de Costa-gieter, de Flügel-doos en het Fontys-logo.
 - **Sticker linksboven**: dropdown met alle donderdag-acties (3 halen 2 betalen, 3 Stelz €10, 10 shots €10, pitcher €10, Full Moon bucket, WK 2026) én losse eventlogo's (Flügel, XXL Saturday, enz.). Kant-en-klaar, geen typwerk — en met eigen schuifjes te verplaatsen en te schalen.
 - **Actie-badge tekst** voor een eigen kreet (alleen zichtbaar als er geen sticker gekozen is), en je @handle onderaan.
 

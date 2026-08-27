@@ -165,6 +165,7 @@ Zat 25-7 “BANGERS ONLY!” met Mister Costa open 19:00</textarea>
               <option value="st_gieter">Costa-gieter</option>
               <option value="st_flugelbox">Flügel-doos</option>
               <option value="ev_fontys">Fontys-logo</option>
+              <option value="ev_bv">Brabantse Vrienden</option>
             </optgroup>
             <optgroup label="Losse elementen (eventlogo's)">
               <option value="ev_flugel">Flügel</option>
@@ -404,12 +405,12 @@ const EVENT_STYLES = [
   {re:/\bpsv\b/i,             badge:'ev_psv', hiColor:'#E30613', defaultDeal:'PITCHER BIER \u20ac20,-'},
   {re:/stelz/i,               logo:'ev_stelzn', grad:['#8E2DE2','#5B12A8'], defaultDeal:'3 STELZ \u20ac10,-', hideLeftover:true, logoScale:1.30},
   {re:/tijd\s*-?\s*machine/i, logo:'ev_tijd',   grad:['#155E68','#0B3238'], defaultDeal:'PITCHER BIER \u20ac10,-'},
-  {re:/happy\s*-?\s*(thursday|thruday)/i, logo:'ev_happy', grad:['#FF9E1B','#C85A00'], hideLeftover:true},
-  {re:/game\s*-?\s*night|gamenight|game\b/i, logo:'ev_game', grad:['#7229A0','#551C79'], hideLeftover:true, logoScale:1.15},   // v7.10: paars gemeten op de designerposter (#662384)
+  {re:/happy\s*-?\s*(thursday|thruday)/i, logo:'ev_happy', grad:['#FF9E1B','#C85A00'], hideLeftover:true, defaultDeal:'3 HALEN = 2 BETALEN'},
+  {re:/game\s*-?\s*night|gamenight|game\b/i, logo:'ev_game', grad:['#7229A0','#551C79'], hideLeftover:true, logoScale:0.75},   // v7.10: paars gemeten op de designerposter (#662384)
   {re:/full\s*moon/i,         logo:'ev_moon',   grad:['#3A2B72','#1E1440']},
   {re:/rocket/i,              logo:'ev_rocket', grad:['#FF8A00','#B54000'], defaultDeal:'10 ROCKETSHOTS \u20ac10,-', hideLeftover:true},
   {re:/bingo/i,               logo:'ev_bingo',  grad:null},
-  {re:/guilty/i,              logo:'ev_guilty', grad:null},
+  {re:/guilty/i,              logo:'ev_guilty', grad:null, logoScale:0.88},
   {re:/brabantse\s*vrienden|brabantse/i, logo:'ev_bv', logoScale:0.72, pattern:'blocks',
    gradStops:[[0,'#FB6300'],[0.30,'#F4531A'],[0.68,'#D6101F'],[1,'#8C0F0B']], hiColor:'#FFD9A8'},
   {re:/international\s*student|student\s*night|\bisn\b/i, logo:'ev_isnphone', logoScale:0.80, keepTitle:true, grad:['#F9497C','#F09A1E'], lightBar:true, hiColor:'#7A0F3C'},
@@ -490,28 +491,28 @@ function parseSchedule(text){
     // volle breedte), en geen automatische PSV-standaardactie
     // v7.10: PSV mag ook in de 'met ...'-tekst staan, want zo schrijft de eigenaar het
     // ("met Mister Costa + 20:00 PSV vs Fortuna"). Alleen als er nog geen ander event is.
-    if(!ev.style && /\bpsv\b/i.test(ev.host)){
-      // v7.13: alles vanaf 'psv' tot het eind van de met-tekst is de wedstrijd. Zo maakt
-      // de volgorde niet uit: "PSV 20:00 vs Excelsior", "PSV vs Excelsior 20:00" en
-      // "+ 20:00 PSV vs Excelsior" leveren allemaal hetzelfde op.
-      const pi = ev.host.search(/\bpsv\b/i);
-      if(pi >= 0){
+    // v7.20: PSV mag naast een ander eventlogo staan (bv. een Brabantse Vrienden-
+    // afterparty die óók een wedstrijd is). Alleen niet naast een event dat zelf al
+    // een badge rechts in de balk zet -- daar is maar één plek.
+    if(/\bpsv\b/i.test(ev.host) && (!ev.style || !ev.style.badge)){
+      let h = ev.host;
+      // 1) tijd: 'open ..' is er al uit, dus elke tijd die nog in de met-tekst staat
+      //    hoort bij de wedstrijd.
+      const tm = h.match(/\b(\d{1,2})[:.](\d{2})\b/);
+      if(tm){ ev.psvTime = tm[1] + ':' + tm[2]; h = h.replace(tm[0], ' '); }
+      // 2) tegenstander, in beide volgordes: "PSV vs Ajax" en "Ajax vs PSV"
+      const CLUB = "[A-Za-zÀ-ÿ0-9.'-]+(?:\\s+[A-Za-zÀ-ÿ0-9.'-]+)?";
+      let om = h.match(new RegExp("\\bpsv\\b\\s*(?:vs\\.?|tegen|[-–])\\s*(" + CLUB + ")", "i"));
+      if(!om) om = h.match(new RegExp("(" + CLUB + ")\\s*(?:vs\\.?|tegen|[-–])\\s*\\bpsv\\b", "i"));
+      if(om) ev.psvVs = om[1].trim().replace(/\s*[-–+]\s*$/, '');
+      // 3) de hele wedstrijdzin uit de DJ-naam knippen
+      h = h.replace(new RegExp("(?:" + CLUB + "\\s*(?:vs\\.?|tegen|[-–])\\s*)?\\bpsv\\b(?:\\s*(?:vs\\.?|tegen|[-–])\\s*" + CLUB + ")?", "i"), ' ');
+      if(!ev.style){
         ev.style = EVENT_STYLES.filter(function(s){ return s.badge === 'ev_psv'; })[0];
-        ev.psvSide = true; ev.noDefaultDeal = true;
-        const seg = ev.host.slice(pi);
-        let pre = ev.host.slice(0, pi);
-        const tm = seg.match(/(\d{1,2})[:.](\d{2})/);
-        if(tm) ev.psvTime = tm[1] + ':' + tm[2];
-        // tijd er eerst uit, anders leest "vs Excelsior 20:00" de tijd als deel van de club
-        const segClean = seg.replace(/\d{1,2}[:.]\d{2}/g, ' ');
-        const om = segClean.match(/(?:vs\.?|tegen|[-\u2013])\s*([A-Za-z\u00C0-\u00FF0-9.'][A-Za-z\u00C0-\u00FF0-9.'\s]*?)\s*$/i);
-        if(om) ev.psvVs = om[1].trim().split(/\s+/).slice(0,2).join(' ');
-        if(!ev.psvTime){   // tijd stond vóór PSV ("met Mister Costa + 20:00 PSV vs ...")
-          const pm2 = pre.match(/\+?\s*(\d{1,2})[:.](\d{2})\s*$/);
-          if(pm2){ ev.psvTime = pm2[1] + ':' + pm2[2]; pre = pre.slice(0, pm2.index); }
-        }
-        ev.host = pre.replace(/\s*[-\u2013+]\s*$/, '').replace(/\s+/g, ' ').trim();
+        ev.noDefaultDeal = true;
       }
+      ev.psvSide = true;
+      ev.host = h.replace(/\s*[-–+]\s*$/, '').replace(/\s+/g, ' ').trim();
     }
     if(ev.style && ev.style.badge === 'ev_psv' && !ev.psvSide && !/^\s*psv|wedstrijd/i.test(ev.title)){
       ev.noDefaultDeal = true;
@@ -1241,20 +1242,25 @@ function render(tSec){
     // moet die ruimte vrijlaten, anders lopen ze door elkaar zodra de balken hoger worden.
     const barLineTxt = (st && st.barLine) ? st.barLine.toUpperCase() : '';
     let barLineRsv = 0;
-    const badgeImg = (st && st.badge) ? IMGS[st.badge] : null;
+    // v7.20: bij psvSide wint het PSV-embleem, ook als de rij al een eventlogo heeft
+    const badgeImg = ev.psvSide ? IMGS.ev_psv : ((st && st.badge) ? IMGS[st.badge] : null);
     if(barLineTxt && badgeImg && !ev.deal){
       ctx.save(); ctx.font = (B*0.20)+'px '+DAYF;
       barLineRsv = ctx.measureText(barLineTxt).width
                  + badgeImg.width * ((B*((st && st.badgeScale) || 1.05))/badgeImg.height) + 36;
       ctx.restore();
     }
-    const badgeScaleF = ev.psvSide ? 0.90 : ((st && st.badgeScale) || 1.05);   // v7.12: embleem fors groter
+    // v7.20: staan er twee merken in één balk (eventlogo + PSV), dan moeten ze allebei
+    // inschikken -- anders is er geen breedte meer over voor de titel en de DJ-naam.
+    const twoMarks = !!(logoImg && ev.psvSide);
+    const badgeScaleF = ev.psvSide ? (twoMarks ? 0.62 : 0.90) : ((st && st.badgeScale) || 1.05);   // v7.12: embleem fors groter
     // v7.12: aftraptijd en tegenstander op één regel ("20:00 VS EXCELSIOR"); de breedte
     // wordt gemeten i.p.v. vast gereserveerd, zodat een korte club (AZ) de titel
     // meer ruimte laat dan een lange.
     const psvLine = ev.psvVs ? ((ev.psvTime ? ev.psvTime + ' ' : '') + 'VS ' + ev.psvVs).toUpperCase() : '';
     let psvLineW = 0;
-    if(psvLine){ ctx.save(); ctx.font = (B*0.20)+'px '+DAYF; psvLineW = ctx.measureText(psvLine).width; ctx.restore(); }
+    const psvLineFs = B * (logoImg ? 0.165 : 0.20);
+    if(psvLine){ ctx.save(); ctx.font = psvLineFs+'px '+DAYF; psvLineW = ctx.measureText(psvLine).width; ctx.restore(); }
     // v7.15: het PSV-blok volgt de schuine rechterrand van de balk. Het embleem schuift
     // naar rechts en de wedstrijdregel mag tot in de onderste punt lopen. Daardoor kost
     // het blok de titel een stuk minder breedte.
@@ -1281,7 +1287,7 @@ function render(tSec){
     let textX = 395;
     if(logoImg){
       // Eventlogo mag over de banner heen steken, zoals in de originelen
-      const lh = B * (hasDeal ? 1.12 : 1.35) * ((st && st.logoScale) || 1);
+      const lh = B * (hasDeal ? 1.12 : 1.35) * ((st && st.logoScale) || 1) * (twoMarks ? 0.62 : 1);
       let lw = logoImg.width * (lh/logoImg.height);
       // headliner krijgt meer ruimte: het logo wordt dan wat kleiner gehouden
       const maxLw = (xRt - 338) * (hasSub ? 0.62 : (hasDeal ? 0.58 : 0.95));
@@ -1302,7 +1308,13 @@ function render(tSec){
       const sideBottom = subLine;
       // v7.12: de balk loopt schuin, dus lager in de balk is er meer breedte. Per regel
       // rekenen met de rechterrand op DIE hoogte i.p.v. met de smalste bovenrand.
-      const wAt = f => xRt + SL*f - 20 - textX - txOff - (f >= 0.7 ? barLineRsv : 0);
+      // v7.20: staat er een PSV-embleem in de balk, dan mag de tekst daar niet onder
+      // door lopen. Bovenin begrenst het embleem, onderin de aftrapregel.
+      const psvEmbW     = (ev.psvSide && badgeImg) ? badgeImg.width * ((B*badgeScaleF)/badgeImg.height) : 0;
+      const psvEmbLeft  = psvEmbW ? (psvEmbRight - psvEmbW - 12) : Infinity;
+      const psvLineLeft = (ev.psvSide && psvLine)  ? (psvLineRight - psvLineW - 14) : Infinity;
+      const wAt = f => Math.min(xRt + SL*f - 20, f >= 0.7 ? psvLineLeft : psvEmbLeft)
+                       - textX - txOff - (f >= 0.7 ? barLineRsv : 0);
       const availW = wAt(0.62);
       if(sideTop && sideBottom){
         ctx.fillStyle = inkMain;
@@ -1396,7 +1408,7 @@ function render(tSec){
           ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
           // v7.15: 33% groter en in donkerrood. PSV-rood op wit haalde maar 4,7:1
           // contrast; #B3040F haalt 6,9:1 en blijft herkenbaar PSV-rood.
-          ctx.font = (B*0.20)+'px '+DAYF;
+          ctx.font = psvLineFs+'px '+DAYF;
           ctx.fillStyle = dark ? '#FFFFFF' : '#B3040F';
           // regel staat onderin de balk, los van de hoogte van de DJ-naam
           ctx.fillText(psvLine, psvLineRight, y + B*0.90);
@@ -1560,8 +1572,13 @@ function render(tSec){
     const stY = parseInt(document.getElementById(yId).value, 10) / 100;
     const stPulse = (tSec < 900) ? 1 + (fmt==='tv' ? 0.05 : 0.035)*Math.sin(tSec/ANIM_DUR*Math.PI*6 + delay*3) : 1;
     const sh = (fmt==='tv' ? H*0.30 : H*0.165) * stZm * stPulse * Math.max(0.01, eSt);
-    const sx = (fmt==='tv' ? W*0.575 : 185) + stX * W*0.35;
+    let sx = (fmt==='tv' ? W*0.575 : 185) + stX * W*0.35;
     const sy = (fmt==='tv' ? H*0.44 : H*0.155) + stY * H*0.30;
+    // v7.20: brede stickers (bv. het Brabantse Vrienden-logo) vielen standaard half
+    // buiten het doek. Nu blijft hij binnen, op een randje van 24px na.
+    const sw = IMGS[key].width * (sh / IMGS[key].height);
+    const over = 24;   // klein overhangetje mag, half buiten beeld niet
+    sx = Math.min(Math.max(sx, sw/2 - over), W - sw/2 + over);
     drawAsset(ctx, key, sx, sy, sh, {rot:-0.08, alpha:Math.min(1, pSt*1.6)});
     const txtEl = document.getElementById(txtId);
     const label = (txtEl ? txtEl.value : '').trim().toUpperCase();

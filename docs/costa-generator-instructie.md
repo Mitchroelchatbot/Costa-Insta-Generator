@@ -25,7 +25,8 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 - Zet een woord tussen sterretjes voor **sierletters**: Thank God It's *Friday*.
 - **Headliner-DJ?** Zet 'm tussen dubbele sterretjes: `met **DJ Jordy Graat**` — groter, en breekt vanzelf over twee regels.
 - **Zelf een regel breken** in de DJ-naam: `met Mister // Costa`.
-- **PSV erbij?** Typ het achter "met", in welke volgorde je wilt: `met DJ Riva Soul PSV 20:00 vs Excelsior` of `PSV vs Excelsior 20:00` — hij vist de tijd en de tegenstander er zelf uit.
+- **PSV naast een ander event?** Kan nu ook: `Zat 5-9 "Afterparty Brabantse Vrienden" met DJ Ian Zwaardski + 20:00 Ajax vs PSV open 17:00`. Het eventlogo en het PSV-embleem krimpen dan allebei automatisch zodat alles in de balk past. Werkt niet samen met Flügel — daar staat het doosje al op die plek.
+- **PSV erbij?** Typ het achter "met", in welke volgorde je wilt: `met DJ Riva Soul PSV 20:00 vs Excelsior`, `PSV vs Excelsior 20:00` of `20:00 Ajax vs PSV` — hij vist de tijd en de tegenstander er zelf uit.
 - Plak je planning gerust vanuit **WhatsApp** — rare tekens ruimt hij zelf op.
 
 ## Kiezen en klikken

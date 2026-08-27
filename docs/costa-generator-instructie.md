@@ -32,7 +32,7 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 
 - **18 templates**, gesorteerd op kleur. Allemaal standaard zonder foto — de naam zegt precies wat je krijgt: de kleur, en waar van toepassing + actie of + volle maan/WK. Foto voeg je zelf toe via de foto-dropdown.
 - **Foto-dropdown**: kies uitgeknipte mensen (aanbevolen — die zweven mooi los op de gloed) of een volledige foto. Of upload je eigen foto.
-- **Nieuwe events herkend aan één woord:** typ **Purple** of **Fontys** voor een paarse balk met het Fontys-logo, **Flügel** voor de gele balk met het doosje en "hele doos €60,-" erbij, en **International Student Night** voor de roze-oranje balk met het telefoontje.
+- **Nieuwe events herkend aan één woord:** typ **Purple** of **Fontys** voor een paarse balk met het Fontys-logo, **Flügel** voor de gele balk met het doosje en "hele doos €60,-" erbij, **International Student Night** voor de roze-oranje balk met het telefoontje, en **Brabantse Vrienden** voor de oranje-naar-rode balk met het logo. Bij Flügel en Brabantse Vrienden blijft de rest van je titel ernaast staan — "Brabantse Vrienden Afterparty" geeft dus het logo plus AFTERPARTY.
 - **Costa-details** in vijf standen: uit, subtiel, medium, vol of extra vol (echte palmen — vanaf vol zitten er toekans in de onderhoeken 🦜).
 - **Drie formaten**: Insta-post (4:5), story (9:16) en **TV-scherm (16:9)** — die laatste met de rijen links en de foto rechts, zoals op de schermen in de zaak. Alle drie kleuren mee met het gekozen template.
 - **Foto schuiven en zoomen**: schuifjes voor links/rechts, omhoog/omlaag en zoom — zet de foto precies zoals jij wil. Zelfde schuifjes voor de sticker.

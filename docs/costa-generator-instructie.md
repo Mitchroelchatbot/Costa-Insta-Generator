@@ -25,9 +25,10 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 - Zet een woord tussen sterretjes voor **sierletters**: Thank God It's *Friday*.
 - **Headliner-DJ?** Zet 'm tussen dubbele sterretjes: `met **DJ Jordy Graat**` — groter, en breekt vanzelf over twee regels.
 - **Zelf een regel breken** in de DJ-naam: `met Mister // Costa`.
+- **Geen DJ die avond?** Laat "met ..." dan gewoon weg. Het PSV-embleem en de aftraptijd worden dan automatisch groter, want er is ruimte over: `Don 10-9 "Costa op Stelz'n" (3 Stelz €10,-) + 18:45 PSV vs Sjachtar open 16:00`
 - **Champions League-avond?** Typ **Champions League** als titel: diepblauwe balk met het CL-logo, het PSV-embleem groot ernaast en de wedstrijd eronder. `Din 16-9 "Champions League" met PSV 21:00 vs Napoli open 19:00`. Let op: voluit typen, "CL" is geen trefwoord — die afkorting mag je wel gewoon in je regel laten staan, hij wordt automatisch weggelaten.
 - **PSV naast een ander event?** Kan nu ook: `Zat 5-9 "Afterparty Brabantse Vrienden" met DJ Ian Zwaardski + 20:00 Ajax vs PSV open 17:00`. Het eventlogo en het PSV-embleem krimpen dan allebei automatisch zodat alles in de balk past. Werkt niet samen met Flügel — daar staat het doosje al op die plek.
-- **PSV erbij?** Typ het achter "met", in welke volgorde je wilt: `met DJ Riva Soul PSV 20:00 vs Excelsior`, `PSV vs Excelsior 20:00` of `20:00 Ajax vs PSV` — hij vist de tijd en de tegenstander er zelf uit.
+- **PSV erbij?** De wedstrijd mag overal in de regel staan — achter "met", of gewoon los als er die avond geen DJ is. In welke volgorde je wilt: `met DJ Riva Soul PSV 20:00 vs Excelsior`, `PSV vs Excelsior 20:00` of `20:00 Ajax vs PSV` — hij vist de tijd en de tegenstander er zelf uit.
 - Plak je planning gerust vanuit **WhatsApp** — rare tekens ruimt hij zelf op.
 
 ## Kiezen en klikken
@@ -38,6 +39,7 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 - **Costa-details** in vijf standen: uit, subtiel, medium, vol of extra vol (echte palmen — vanaf vol zitten er toekans in de onderhoeken 🦜).
 - **Drie formaten**: Insta-post (4:5), story (9:16) en **TV-scherm (16:9)** — die laatste met de rijen links en de foto rechts, zoals op de schermen in de zaak. Alle drie kleuren mee met het gekozen template.
 - **Foto schuiven en zoomen**: schuifjes voor links/rechts, omhoog/omlaag en zoom — zet de foto precies zoals jij wil. Zelfde schuifjes voor de sticker.
+- **Twee events op één avond?** Een balk heeft één logoplek links en één badgeplek rechts (die is van PSV). Wil je bijvoorbeeld Stelz'n én Champions League laten zien: geef de balk aan je eigen event en zet het andere logo als sticker bovenin.
 - **Twee stickers tegelijk**: elk met eigen schuifjes voor plek en grootte, en een eigen prijsveld eronder (bv. "€ 12,50" of "HELE WEEKEND € 60,-"). Nieuw in de lijst: de Costa-gieter, de Flügel-doos en het Fontys-logo.
 - **Sticker linksboven**: dropdown met alle donderdag-acties (3 halen 2 betalen, 3 Stelz €10, 10 shots €10, pitcher €10, Full Moon bucket, WK 2026) én losse eventlogo's (Flügel, XXL Saturday, enz.). Kant-en-klaar, geen typwerk — en met eigen schuifjes te verplaatsen en te schalen.
 - **Actie-badge tekst** voor een eigen kreet (alleen zichtbaar als er geen sticker gekozen is), en je @handle onderaan.

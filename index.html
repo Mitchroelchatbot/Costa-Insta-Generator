@@ -166,6 +166,7 @@ Zat 25-7 “BANGERS ONLY!” met Mister Costa open 19:00</textarea>
               <option value="st_flugelbox">Flügel-doos</option>
               <option value="ev_fontys">Fontys-logo</option>
               <option value="ev_bv">Brabantse Vrienden</option>
+              <option value="ev_cl">Champions League</option>
             </optgroup>
             <optgroup label="Losse elementen (eventlogo's)">
               <option value="ev_flugel">Flügel</option>
@@ -412,7 +413,7 @@ const EVENT_STYLES = [
   {re:/rocket/i,              logo:'ev_rocket', grad:['#FF8A00','#B54000'], defaultDeal:'10 ROCKETSHOTS \u20ac10,-', hideLeftover:true},
   {re:/bingo/i,               logo:'ev_bingo',  grad:null},
   {re:/guilty/i,              logo:'ev_guilty', grad:null, logoScale:0.88},
-  {re:/champions\s*league|championsleague/i, logo:'ev_cl', logoScale:0.78, hideLeftover:true,
+  {re:/champions\s*league|championsleague/i, logo:'ev_cl', logoScale:0.78, logoScaleEmpty:0.98, hideLeftover:true,
    gradStops:[[0,'#1E52AE'],[0.42,'#123268'],[1,'#050E33']], hiColor:'#8FD0FF'},
   {re:/brabantse\s*vrienden|brabantse/i, logo:'ev_bv', logoScale:0.72, pattern:'blocks',
    gradStops:[[0,'#FB6300'],[0.30,'#F4531A'],[0.68,'#D6101F'],[1,'#8C0F0B']], hiColor:'#FFD9A8'},
@@ -464,6 +465,21 @@ function parseSchedule(text){
     .replace(/[\u2018\u2019\u201A\u201B\u2032\u275B\u275C]/g, "'")
     .replace(/[\u00A0\u202F\u2007]/g, ' ')
     .replace(/[\u2012\u2013\u2014\u2015]/g, '-');
+  // v7.22: de wedstrijd mag overal in de regel staan, niet alleen achter 'met'.
+  // Zonder DJ-naam is er namelijk geen met-tekst, en dan viel PSV helemaal weg.
+  const PSV_CLUB = "[A-Za-zÀ-ÿ0-9.'-]+(?:\\s+[A-Za-zÀ-ÿ0-9.'-]+)?";
+  const pickPsv = function(txt){
+    let h = txt, time = '', vs = '';
+    const tm = h.match(/\b(\d{1,2})[:.](\d{2})\b/);
+    if(tm){ time = tm[1] + ':' + tm[2]; h = h.replace(tm[0], ' '); }
+    let om = h.match(new RegExp("\\bpsv\\b\\s*(?:vs\\.?|tegen|[-–])\\s*(" + PSV_CLUB + ")", "i"));
+    if(!om) om = h.match(new RegExp("(" + PSV_CLUB + ")\\s*(?:vs\\.?|tegen|[-–])\\s*\\bpsv\\b", "i"));
+    if(om) vs = om[1].trim().replace(/\s*[-–+]\s*$/, '');
+    h = h.replace(new RegExp("(?:" + PSV_CLUB + "\\s*(?:vs\\.?|tegen|[-–])\\s*)?\\bpsv\\b(?:\\s*(?:vs\\.?|tegen|[-–])\\s*" + PSV_CLUB + ")?", "i"), ' ');
+    // de competitie-aanduiding hoort bij de wedstrijd, niet bij de DJ-naam
+    h = h.replace(/\b(cl|c\.l\.|champions\s*league|europa\s*league|conference\s*league|eredivisie|knvb(\s*beker)?)\b/ig, ' ');
+    return {time:time, vs:vs, rest:h.replace(/\s*[-–+]\s*$/,'').replace(/^\s*[-–+]\s*/,'').replace(/\s+/g,' ').trim()};
+  };
   const events = [];
   const matches = [...text.matchAll(DAY_RE)];
   for(let i=0;i<matches.length;i++){
@@ -497,28 +513,21 @@ function parseSchedule(text){
     // v7.20: PSV mag naast een ander eventlogo staan (bv. een Brabantse Vrienden-
     // afterparty die óók een wedstrijd is). Alleen niet naast een event dat zelf al
     // een badge rechts in de balk zet -- daar is maar één plek.
-    if(/\bpsv\b/i.test(ev.host) && (!ev.style || !ev.style.badge)){
-      let h = ev.host;
-      // 1) tijd: 'open ..' is er al uit, dus elke tijd die nog in de met-tekst staat
-      //    hoort bij de wedstrijd.
-      const tm = h.match(/\b(\d{1,2})[:.](\d{2})\b/);
-      if(tm){ ev.psvTime = tm[1] + ':' + tm[2]; h = h.replace(tm[0], ' '); }
-      // 2) tegenstander, in beide volgordes: "PSV vs Ajax" en "Ajax vs PSV"
-      const CLUB = "[A-Za-zÀ-ÿ0-9.'-]+(?:\\s+[A-Za-zÀ-ÿ0-9.'-]+)?";
-      let om = h.match(new RegExp("\\bpsv\\b\\s*(?:vs\\.?|tegen|[-–])\\s*(" + CLUB + ")", "i"));
-      if(!om) om = h.match(new RegExp("(" + CLUB + ")\\s*(?:vs\\.?|tegen|[-–])\\s*\\bpsv\\b", "i"));
-      if(om) ev.psvVs = om[1].trim().replace(/\s*[-–+]\s*$/, '');
-      // 3) de hele wedstrijdzin uit de DJ-naam knippen
-      h = h.replace(new RegExp("(?:" + CLUB + "\\s*(?:vs\\.?|tegen|[-–])\\s*)?\\bpsv\\b(?:\\s*(?:vs\\.?|tegen|[-–])\\s*" + CLUB + ")?", "i"), ' ');
-      if(!ev.style){
-        ev.style = EVENT_STYLES.filter(function(s){ return s.badge === 'ev_psv'; })[0];
-        ev.noDefaultDeal = true;
+    if(!ev.style || !ev.style.badge){
+      // v7.22: eerst in de met-tekst kijken, anders in wat er los in de regel staat
+      const inHost = /\bpsv\b/i.test(ev.host);
+      const inSeg  = !inHost && /\bpsv\b/i.test(seg) && !/\bpsv\b/i.test(ev.title);
+      if(inHost || inSeg){
+        const r = pickPsv(inHost ? ev.host : seg);
+        if(r.time) ev.psvTime = r.time;
+        if(r.vs) ev.psvVs = r.vs;
+        if(!ev.style){
+          ev.style = EVENT_STYLES.filter(function(s){ return s.badge === 'ev_psv'; })[0];
+          ev.noDefaultDeal = true;
+        }
+        ev.psvSide = true;
+        if(inHost){ ev.host = r.rest; } else { seg = r.rest; }
       }
-      ev.psvSide = true;
-      // v7.21: de competitie-aanduiding hoort bij de wedstrijd, niet bij de DJ.
-      // "+ 18:45 CL PSV vs Sjachtar" liet anders "+ CL" achter op de balk.
-      h = h.replace(/\b(cl|c\.l\.|champions\s*league|europa\s*league|el|conference\s*league|eredivisie|knvb(\s*beker)?)\b/ig, ' ');
-      ev.host = h.replace(/\s*[-–+]\s*$/, '').replace(/^\s*[-–+]\s*/, '').replace(/\s+/g, ' ').trim();
     }
     if(ev.style && ev.style.badge === 'ev_psv' && !ev.psvSide && !/^\s*psv|wedstrijd/i.test(ev.title)){
       ev.noDefaultDeal = true;
@@ -1296,7 +1305,9 @@ function render(tSec){
     let textX = 395;
     if(logoImg){
       // Eventlogo mag over de banner heen steken, zoals in de originelen
-      const lh = B * (hasDeal ? 1.12 : 1.35) * ((st && st.logoScale) || 1) * (twoMarks ? 0.62 : 1);
+      // v7.22: staat er verder niets in de balk, dan mag het logo wat groter
+      const lSc = (st && barEmpty && st.logoScaleEmpty) ? st.logoScaleEmpty : ((st && st.logoScale) || 1);
+      const lh = B * (hasDeal ? 1.12 : 1.35) * lSc * (twoMarks ? 0.62 : 1);
       let lw = logoImg.width * (lh/logoImg.height);
       // headliner krijgt meer ruimte: het logo wordt dan wat kleiner gehouden
       const maxLw = (xRt - 338) * (hasSub ? 0.62 : (hasDeal ? 0.58 : 0.95));

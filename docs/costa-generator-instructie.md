@@ -41,7 +41,7 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 - **Drie formaten**: Insta-post (4:5), story (9:16) en **TV-scherm (16:9)** — die laatste met de rijen links en de foto rechts, zoals op de schermen in de zaak. Alle drie kleuren mee met het gekozen template.
 - **Foto schuiven en zoomen**: schuifjes voor links/rechts, omhoog/omlaag en zoom — zet de foto precies zoals jij wil. Zelfde schuifjes voor de sticker.
 - **Twee events op één avond?** Een balk heeft één logoplek links en één badgeplek rechts (die is van PSV). Wil je bijvoorbeeld Stelz'n én Champions League laten zien: geef de balk aan je eigen event en zet het andere logo als sticker bovenin.
-- **Twee stickers tegelijk**: elk met eigen schuifjes voor plek en grootte, en een eigen prijsveld eronder (bv. "€ 12,50" of "HELE WEEKEND € 60,-"). Nieuw in de lijst: de Costa-gieter, de Flügel-doos en het Fontys-logo.
+- **Twee stickers tegelijk**: elk met eigen schuifjes voor plek en grootte, en een eigen prijsveld eronder (bv. "€ 12,50" of "HELE WEEKEND € 60,-"). Nieuw in de lijst: de Costa-gieter, de Sambuca-fles, de Flügel-doos, het Fontys-logo, Brabantse Vrienden en Champions League. Een hoge sticker zoals de fles zet je rond de 150% zoom, anders is het etiket niet te lezen.
 - **Sticker linksboven**: dropdown met alle donderdag-acties (3 halen 2 betalen, 3 Stelz €10, 10 shots €10, pitcher €10, Full Moon bucket, WK 2026) én losse eventlogo's (Flügel, XXL Saturday, enz.). Kant-en-klaar, geen typwerk — en met eigen schuifjes te verplaatsen en te schalen.
 - **Actie-badge tekst** voor een eigen kreet (alleen zichtbaar als er geen sticker gekozen is), en je @handle onderaan.
 

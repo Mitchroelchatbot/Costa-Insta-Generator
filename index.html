@@ -404,6 +404,10 @@ const THEMES = {
 };
 // Event detection: logo + banner styling. First match wins.
 const EVENT_STYLES = [
+  // v7.23: eigen matchday-balk in PSV-rood. Staat vooraan, want een titel als
+  // "Matchday PSV vs Sparta" matcht anders eerst op het losse woord psv.
+  {re:/\bmatchday\b|wedstrijddag/i, gradStops:[[0,'#E4032B'],[0.50,'#C10A22'],[1,'#8A0716']],
+   psvCenter:true, hiColor:'#FFD400'},
   {re:/\bpsv\b/i,             badge:'ev_psv', hiColor:'#E30613', defaultDeal:'PITCHER BIER \u20ac20,-'},
   {re:/stelz/i,               logo:'ev_stelzn', grad:['#8E2DE2','#5B12A8'], defaultDeal:'3 STELZ \u20ac10,-', hideLeftover:true, logoScale:1.30},
   {re:/tijd\s*-?\s*machine/i, logo:'ev_tijd',   grad:['#155E68','#0B3238'], defaultDeal:'PITCHER BIER \u20ac10,-'},
@@ -529,14 +533,19 @@ function parseSchedule(text){
         if(inHost){ ev.host = r.rest; } else { seg = r.rest; }
       }
     }
-    if(ev.style && ev.style.badge === 'ev_psv' && !ev.psvSide && !/^\s*psv|wedstrijd/i.test(ev.title)){
+    // v7.23: staat de wedstrijd in de titel zelf (bv. zonder aanhalingstekens getypt:
+    // Zon 13-9 Matchday 14:30 PSV vs Sparta), haal hem daar dan uit. Werkt nu ook voor
+    // een event dat zelf geen badge zet, zoals de matchday-balk. Een titel die MET psv
+    // begint blijft met rust: die hoort als grote titel op de balk.
+    if(ev.style && !ev.style.badge2 && !ev.psvSide && /\bpsv\b/i.test(ev.title)
+       && (ev.style.badge === 'ev_psv' || !ev.style.badge)
+       && !/^\s*psv|wedstrijd/i.test(ev.title)){
+      const r = pickPsv(ev.title);
+      if(r.time) ev.psvTime = r.time;
+      if(r.vs) ev.psvVs = r.vs;
+      ev.psvSide = true;
       ev.noDefaultDeal = true;
-      const pm = ev.title.match(/\bpsv\b(?:\s*(?:vs\.?|[-\u2013:])\s*([A-Za-z\u00C0-\u00FF0-9.']+))?/i);
-      if(pm){
-        ev.psvSide = true;
-        if(pm[1]) ev.psvVs = pm[1];
-        ev.title = ev.title.replace(pm[0], ' ').replace(/\s+/g, ' ').trim();
-      }
+      ev.title = r.rest || ev.title;
     }
     if(!ev.title.includes('*')){
       ev.title = ev.title.replace(/(friday|saturday|sunday|vrijdag|zaterdag|zondag)([!"]?)\s*$/i, '*$1*$2');
@@ -1286,8 +1295,15 @@ function render(tSec){
     // OPEN-blok op de hoogte waar het embleem het breedst is; die schaalt mee met de
     // balkhoogte, dus het klopt ook bij 5-6 rijen. Het embleem wordt ná het OPEN-blok
     // getekend, zodat het er bij een klein overlapje bovenop ligt i.p.v. erachter.
-    const psvEmbRight  = xRt + 16 + SL*0.29 - 4;
-    const psvLineRight = xRt + SL*0.84 - 10;   // niet verder: de afgeronde onderhoek snijdt de balk daar al naar binnen
+    // v7.23: op een matchday-balk is PSV het event zelf, dus staat het embleem
+    // meer naar het midden i.p.v. helemaal rechts tegen het OPEN-blok aan.
+    const psvEmbW0 = badgeImg ? badgeImg.width * ((B*badgeScaleF)/badgeImg.height) : 0;
+    const psvEmbRight  = (st && st.psvCenter)
+      ? 282 + 0.62*(xRt + SL*0.5 - 282) + psvEmbW0/2
+      : xRt + 16 + SL*0.29 - 4;
+    const psvLineRight = (st && st.psvCenter)
+      ? psvEmbRight
+      : xRt + SL*0.84 - 10;   // niet verder: de afgeronde onderhoek snijdt de balk daar al naar binnen
     let badgeW = 0;
     if(badgeImg){
       if(ev.psvSide){

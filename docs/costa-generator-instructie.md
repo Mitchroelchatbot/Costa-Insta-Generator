@@ -25,6 +25,7 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 - Zet een woord tussen sterretjes voor **sierletters**: Thank God It's *Friday*.
 - **Headliner-DJ?** Zet 'm tussen dubbele sterretjes: `met **DJ Jordy Graat**` — groter, en breekt vanzelf over twee regels.
 - **Zelf een regel breken** in de DJ-naam: `met Mister // Costa`.
+- **Champions League-avond?** Typ **Champions League** als titel: diepblauwe balk met het CL-logo, het PSV-embleem groot ernaast en de wedstrijd eronder. `Din 16-9 "Champions League" met PSV 21:00 vs Napoli open 19:00`. Let op: voluit typen, "CL" is geen trefwoord — die afkorting mag je wel gewoon in je regel laten staan, hij wordt automatisch weggelaten.
 - **PSV naast een ander event?** Kan nu ook: `Zat 5-9 "Afterparty Brabantse Vrienden" met DJ Ian Zwaardski + 20:00 Ajax vs PSV open 17:00`. Het eventlogo en het PSV-embleem krimpen dan allebei automatisch zodat alles in de balk past. Werkt niet samen met Flügel — daar staat het doosje al op die plek.
 - **PSV erbij?** Typ het achter "met", in welke volgorde je wilt: `met DJ Riva Soul PSV 20:00 vs Excelsior`, `PSV vs Excelsior 20:00` of `20:00 Ajax vs PSV` — hij vist de tijd en de tegenstander er zelf uit.
 - Plak je planning gerust vanuit **WhatsApp** — rare tekens ruimt hij zelf op.
@@ -43,7 +44,7 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 
 ## Downloaden
 
-- **Download PNG** → klaar om te posten.
+- **Download PNG** → klaar om te posten. Het bestand heet automatisch `week 38 post`, `week 38 Story` of `week 38 schermen` — het weeknummer komt uit de eerste datum in je planning.
 - **▶ Animatie** → preview van de bewegende versie.
 - **🎥 Video opnemen (9 sec)** → geanimeerde video: de foto en rijen komen rustig binnen, "Deze week" knippert als neon, en bij post/story licht het Costa-logo op als finale. De TV-versie heeft geen finale zodat hij netjes doorloopt als loop op het scherm. Op iPhone/Safari krijg je direct een MP4.
 

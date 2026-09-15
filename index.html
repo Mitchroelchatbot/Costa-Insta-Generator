@@ -27,6 +27,11 @@
   .actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;}
   button{border:0;border-radius:999px;padding:14px 22px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
   .btn-primary{background:linear-gradient(90deg,var(--pink),var(--orange));color:#1A0B2E;}
+  .btn-small{background:#231043;color:var(--cream);border:1px solid var(--line);padding:9px 14px;font-size:13px;}
+  .btn-small:hover{border-color:var(--pink);}
+  .saverow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .saverow input[type="text"]{flex:1 1 150px;min-width:120px;}
+  .saverow select{flex:1 1 170px;min-width:140px;}
   .btn-primary:focus-visible{outline:3px solid var(--cream);outline-offset:2px;}
   .preview{display:flex;flex-direction:column;align-items:center;gap:12px;}
   @media(min-width:800px){
@@ -54,6 +59,22 @@ Don 23-7 “Costa op Stelz’n” met DJ Mitch Official open 19:00
 Vrij 24-7 “Thank God It’s Friday” met DJ Sylvie Thijs open 19:00
 Zat 25-7 “BANGERS ONLY!” met Mister Costa open 19:00</textarea>
       <p class="hint">Herkent automatisch eventlogo’s: Game Night, Stelz, Tijd Machine, Happy Thursday, Full Moon, Rocket Shot, Bingo, Guilty Pleasure, Flügel, XXL Saturday. Zet “WK” in de titel voor een WK-badge. Zet een woord tussen sterretjes voor sierletters, bijv. Thank God It’s *Friday*. Zet een DJ tussen dubbele sterretjes voor een headliner (groter, mag over twee regels): met **DJ Jordy Graat**.</p>
+
+      <details id="weekBox">
+        <summary>Opgeslagen weken</summary>
+        <p class="hint" style="margin:6px 0 10px;">Bewaart je hele invulling — planning, template, schuifjes en stickers — onder een naam, hier in deze browser. Een foto die je zelf uploadt gaat niet mee; de foto's uit de lijst wel.</p>
+        <div class="saverow" style="margin-bottom:10px;">
+          <input type="text" id="weekName" placeholder="bijv. week 38">
+          <button type="button" class="btn-small" id="weekSave">Opslaan</button>
+        </div>
+        <div class="saverow">
+          <select id="weekList"><option value="">— opgeslagen weken —</option></select>
+          <button type="button" class="btn-small" id="weekLoad">Openen</button>
+          <button type="button" class="btn-small" id="weekDel">Verwijderen</button>
+        </div>
+        <p class="hint" id="weekMsg" style="margin-top:10px;"></p>
+      </details>
+
 
       <div class="row2">
         <div>
@@ -161,6 +182,12 @@ Zat 25-7 “BANGERS ONLY!” met Mister Costa open 19:00</textarea>
               <option value="st_moonb">Full Moon cocktail bucket €20</option>
               <option value="st_wk">WK 2026</option>
             </optgroup>
+            <optgroup label="Losse takken en bladeren">
+              <option value="palm4">Bananenblad</option>
+              <option value="palm2">Monstera + varenblad</option>
+              <option value="palm1">Palmtak met paradijsvogelbloem</option>
+              <option value="palm3">Toekan op palmblad</option>
+            </optgroup>
             <optgroup label="Nieuw">
               <option value="st_gieter">Costa-gieter</option>
               <option value="st_sambuca">Sambuca (Luxardo)</option>
@@ -191,6 +218,8 @@ Zat 25-7 “BANGERS ONLY!” met Mister Costa open 19:00</textarea>
           <input type="range" id="stickerY" min="-100" max="100" value="0">
           <label for="stickerZoom">Sticker 1 zoom</label>
           <input type="range" id="stickerZoom" min="50" max="400" value="100">
+          <label for="stickerRot">Sticker 1 draaien</label>
+          <input type="range" id="stickerRot" min="-180" max="180" value="-5">
           <label for="sticker2">Tweede sticker (optioneel)</label>
 <select id="sticker2">
             <option value="geen">Geen</option>
@@ -203,6 +232,12 @@ Zat 25-7 “BANGERS ONLY!” met Mister Costa open 19:00</textarea>
               <option value="st_pitcher">Pitcher €10</option>
               <option value="st_moonb">Full Moon cocktail bucket €20</option>
               <option value="st_wk">WK 2026</option>
+            </optgroup>
+            <optgroup label="Losse takken en bladeren">
+              <option value="palm4">Bananenblad</option>
+              <option value="palm2">Monstera + varenblad</option>
+              <option value="palm1">Palmtak met paradijsvogelbloem</option>
+              <option value="palm3">Toekan op palmblad</option>
             </optgroup>
             <optgroup label="Nieuw">
               <option value="st_gieter">Costa-gieter</option>
@@ -231,6 +266,8 @@ Zat 25-7 “BANGERS ONLY!” met Mister Costa open 19:00</textarea>
           <input type="range" id="sticker2Y" min="-100" max="100" value="18">
           <label for="sticker2Zoom">Sticker 2 zoom</label>
           <input type="range" id="sticker2Zoom" min="50" max="400" value="100">
+          <label for="sticker2Rot">Sticker 2 draaien</label>
+          <input type="range" id="sticker2Rot" min="-180" max="180" value="-5">
         </div>
         <div>
           <label for="badge">Actie-badge tekst (optioneel)</label>
@@ -1000,7 +1037,10 @@ function render(tSec){
     // Basislaag: bij ingebouwde templates met ingebakken foto die eerst afdekken,
     // anders schemert die onder/naast een gekozen foto door. Nieuwe 'clean'-templates
     // zijn al fotoloos (story-formaat gebruikt altijd het oude story-template -> wel afdekken).
-    const cleanTpl = fmt !== 'story' && !!T.clean;
+    // v7.26: sinds v7.14 wordt de story-achtergrond opgebouwd uit het POST-template,
+    // dus een schoon template is ook in story schoon. De oude uitzondering dekte de
+    // bovenkant af en wiste daarmee de palmbladeren die in de post wel staan.
+    const cleanTpl = !!T.clean;
     if(!customTpl && !cleanTpl){ drawEmptyTop(ctx, W, H, themeKey, T); }
     if(photoPick && pPhoto > 0){
       ctx.save();
@@ -1101,13 +1141,18 @@ function render(tSec){
   events.forEach((ev,i)=>{
     const y = rowsTop + i*pitch;
     const st = ev.style;
-    const rowT0 = 0.45 + i*0.4;
-    const p = Math.min(1, Math.max(0, (tSec - rowT0)/0.6));
+    // v7.26: op een tv-scherm kijk je van afstand en schoten de balken te snel in beeld.
+    // Daar komen ze rustiger en met meer tussenruimte binnen; post/story blijven zoals ze waren.
+    const isTvFmt = (fmt === 'tv');
+    const rowStep = isTvFmt ? 0.55 : 0.40;
+    const rowDur  = isTvFmt ? 1.00 : 0.60;
+    const rowT0 = (isTvFmt ? 0.50 : 0.45) + i*rowStep;
+    const p = Math.min(1, Math.max(0, (tSec - rowT0)/rowDur));
     if(p <= 0) return;
     const e = easeOutBack(p);
-    const pOpen = Math.min(1, Math.max(0, (tSec - rowT0 - 0.15)/0.6));
+    const pOpen = Math.min(1, Math.max(0, (tSec - rowT0 - (isTvFmt ? 0.25 : 0.15))/rowDur));
     const eOpen = easeOutBack(pOpen);
-    const pChip = Math.min(1, Math.max(0, (tSec - rowT0 - 0.40)/0.4));
+    const pChip = Math.min(1, Math.max(0, (tSec - rowT0 - (isTvFmt ? 0.65 : 0.40))/(isTvFmt ? 0.7 : 0.4)));
     const eChip = easeOutBack(pChip);
     // v7.16: "doorlopen" -- tussen 3,4 en 6,6 sec wordt elke avond kort aangestipt,
     // van boven naar beneden. Twee effecten tegelijk (keuze eigenaar: zacht + duidelijk):
@@ -1603,7 +1648,7 @@ function render(tSec){
 
   // v7.18: twee stickervakken, elk met eigen plek, zoom en prijstekst eronder.
   // Sticker 2 komt 0,25 sec later binnen, anders ploppen ze als een blok tegelijk op.
-  function paintSticker(key, xId, yId, zId, txtId, delay){
+  function paintSticker(key, xId, yId, zId, txtId, delay, rId){
     if(key === 'geen' || !IMGS[key]) return false;
     const pSt = (tSec < 900) ? Math.min(1, Math.max(0, (tSec - 0.9 - delay)/0.5)) : 1;
     if(pSt <= 0) return true;
@@ -1613,7 +1658,9 @@ function render(tSec){
     const stY = parseInt(document.getElementById(yId).value, 10) / 100;
     const stPulse = (tSec < 900) ? 1 + (fmt==='tv' ? 0.05 : 0.035)*Math.sin(tSec/ANIM_DUR*Math.PI*6 + delay*3) : 1;
     const sh = (fmt==='tv' ? H*0.30 : H*0.165) * stZm * stPulse * Math.max(0.01, eSt);
-    let sx = (fmt==='tv' ? W*0.575 : 185) + stX * W*0.35;
+    // v7.26: in post/story reikte het schuifje maar tot iets over het midden, waardoor
+    // je een tak nooit in de rechterhoek kreeg. Groter bereik, tv blijft zoals het was.
+    let sx = (fmt==='tv' ? W*0.575 : 185) + stX * (fmt==='tv' ? W*0.35 : W*0.55);
     let sy = (fmt==='tv' ? H*0.44 : H*0.155) + stY * H*0.30;
     // v7.20: brede stickers (bv. het Brabantse Vrienden-logo) vielen standaard half
     // buiten het doek. Nu blijft hij binnen, op een randje van 24px na.
@@ -1622,7 +1669,12 @@ function render(tSec){
     sx = Math.min(Math.max(sx, sw/2 - over), W - sw/2 + over);
     // v7.24: ook verticaal, anders loopt een hoge sticker (fles) boven het doek uit
     sy = Math.min(Math.max(sy, sh/2 - over), H - sh/2 + over);
-    drawAsset(ctx, key, sx, sy, sh, {rot:-0.08, alpha:Math.min(1, pSt*1.6)});
+    // v7.26: zelf te draaien, en tijdens de animatie wiegt hij zachtjes -- dat geeft
+    // vooral de story leven, want daar staat bovenin verder niets te bewegen.
+    const rEl = rId ? document.getElementById(rId) : null;
+    const rotBase = rEl ? (parseInt(rEl.value, 10) * Math.PI / 180) : -0.08;
+    const sway = (tSec < 900) ? 0.022 * Math.sin(tSec/ANIM_DUR*Math.PI*4 + delay*5) : 0;
+    drawAsset(ctx, key, sx, sy, sh, {rot: rotBase + sway, alpha:Math.min(1, pSt*1.6)});
     const txtEl = document.getElementById(txtId);
     const label = (txtEl ? txtEl.value : '').trim().toUpperCase();
     if(label){
@@ -1656,8 +1708,8 @@ function render(tSec){
   }
   const stickerKey = document.getElementById('sticker').value;
   const sticker2Key = document.getElementById('sticker2').value;
-  const st1 = paintSticker(stickerKey, 'stickerX', 'stickerY', 'stickerZoom', 'stickerTxt', 0);
-  const st2 = paintSticker(sticker2Key, 'sticker2X', 'sticker2Y', 'sticker2Zoom', 'sticker2Txt', 0.25);
+  const st1 = paintSticker(stickerKey, 'stickerX', 'stickerY', 'stickerZoom', 'stickerTxt', 0, 'stickerRot');
+  const st2 = paintSticker(sticker2Key, 'sticker2X', 'sticker2Y', 'sticker2Zoom', 'sticker2Txt', 0.25, 'sticker2Rot');
   if(st1 || st2){
     // sticker heeft voorrang op de tekstbadge
   } else if(badge){
@@ -1903,10 +1955,82 @@ document.getElementById('download').addEventListener('click', ()=>{
   },'image/png');
 });
 document.getElementById('photoSel').addEventListener('change', ()=>{ photoImg = null; });
-['schedule','theme','flair','badge','handle','bandTop','bandBottom','photoSel','photoX','photoY','photoZoom','sticker','stickerX','stickerY','stickerZoom','stickerTxt','sticker2','sticker2X','sticker2Y','sticker2Zoom','sticker2Txt','djfont','titleSize','subSize','textX','textY','dealX','dealY','dealZoom'].forEach(id=>{
+['schedule','theme','flair','badge','handle','bandTop','bandBottom','photoSel','photoX','photoY','photoZoom','sticker','stickerX','stickerY','stickerZoom','stickerRot','stickerTxt','sticker2','sticker2X','sticker2Y','sticker2Zoom','sticker2Rot','sticker2Txt','djfont','titleSize','subSize','textX','textY','dealX','dealY','dealZoom'].forEach(id=>{
   document.getElementById(id).addEventListener('input', ()=>render());
   document.getElementById(id).addEventListener('change', ()=>render());
 });
+
+/* ---- v7.25: weken bewaren in deze browser -------------------------------- */
+const WEEK_KEY = 'costa_weken_v1';
+// alles wat de look bepaalt; 'format' bewust niet -- dat is alleen welke export je bekijkt
+const WEEK_FIELDS = ['schedule','theme','flair','badge','handle','bandTop','bandBottom',
+  'photoSel','photoX','photoY','photoZoom','sticker','stickerX','stickerY','stickerZoom','stickerRot','stickerTxt',
+  'sticker2','sticker2X','sticker2Y','sticker2Zoom','sticker2Rot','sticker2Txt',
+  'djfont','titleSize','subSize','textX','textY','dealX','dealY','dealZoom'];
+
+function weekMsg(txt){ const el = document.getElementById('weekMsg'); if(el) el.textContent = txt || ''; }
+function weekReadAll(){
+  try{ return JSON.parse(localStorage.getItem(WEEK_KEY) || '{}') || {}; }
+  catch(e){ return {}; }
+}
+function weekWriteAll(obj){
+  try{ localStorage.setItem(WEEK_KEY, JSON.stringify(obj)); return true; }
+  catch(e){ weekMsg('Opslaan lukt niet in deze browser (privémodus of geheugen vol).'); return false; }
+}
+function weekRefresh(sel){
+  const all = weekReadAll();
+  const names = Object.keys(all).sort();
+  const list = document.getElementById('weekList');
+  list.innerHTML = '<option value="">— opgeslagen weken —</option>' +
+    names.map(n => '<option value="' + n.replace(/"/g,'&quot;') + '">' + n.replace(/</g,'&lt;') + '</option>').join('');
+  if(sel && names.indexOf(sel) >= 0) list.value = sel;
+}
+function weekCollect(){
+  const d = {};
+  WEEK_FIELDS.forEach(id => { const el = document.getElementById(id); if(el) d[id] = el.value; });
+  return d;
+}
+function weekApply(d){
+  WEEK_FIELDS.forEach(id => {
+    if(!(id in d)) return;
+    const el = document.getElementById(id); if(!el) return;
+    el.value = d[id];
+    el.dispatchEvent(new Event('input', {bubbles:true}));
+    el.dispatchEvent(new Event('change', {bubbles:true}));
+  });
+  render();
+}
+document.getElementById('weekSave').addEventListener('click', ()=>{
+  const inp = document.getElementById('weekName');
+  const name = (inp.value || ('week ' + weekNr())).trim();
+  if(!name){ weekMsg('Geef eerst een naam op.'); return; }
+  const all = weekReadAll();
+  const bestond = Object.prototype.hasOwnProperty.call(all, name);
+  if(bestond && !confirm('"' + name + '" bestaat al. Overschrijven?')) return;
+  all[name] = weekCollect();
+  if(weekWriteAll(all)){
+    weekRefresh(name); inp.value = '';
+    weekMsg(bestond ? '"' + name + '" is bijgewerkt.' : '"' + name + '" opgeslagen.');
+  }
+});
+document.getElementById('weekLoad').addEventListener('click', ()=>{
+  const name = document.getElementById('weekList').value;
+  if(!name){ weekMsg('Kies eerst een week uit de lijst.'); return; }
+  const all = weekReadAll();
+  if(!all[name]){ weekMsg('Die week is niet meer te vinden.'); weekRefresh(); return; }
+  weekApply(all[name]);
+  weekMsg('"' + name + '" geopend. Een eigen geüploade foto moet je opnieuw kiezen.');
+});
+document.getElementById('weekDel').addEventListener('click', ()=>{
+  const name = document.getElementById('weekList').value;
+  if(!name){ weekMsg('Kies eerst een week uit de lijst.'); return; }
+  if(!confirm('"' + name + '" definitief verwijderen?')) return;
+  const all = weekReadAll(); delete all[name];
+  if(weekWriteAll(all)){ weekRefresh(); weekMsg('"' + name + '" verwijderd.'); }
+});
+weekRefresh();
+document.getElementById('weekName').placeholder = 'bijv. week ' + weekNr();
+
 boot();
 </script>
 </body>

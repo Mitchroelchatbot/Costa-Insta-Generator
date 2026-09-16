@@ -443,6 +443,10 @@ const THEMES = {
 };
 // Event detection: logo + banner styling. First match wins.
 const EVENT_STYLES = [
+  // v7.27: Oktoberfest -- Beiers blauw met witte ruiten bovenin (vlagpatroon),
+  // dat naar beneden uitdooft zodat de titel leesbaar blijft.
+  {re:/oktoberfest|octoberfest|bierfeest|bierfest/i, gradStops:[[0,'#2E7CD6'],[0.48,'#12559F'],[1,'#0A3A70']],
+   pattern:'bavaria', hiColor:'#FFD83B'},
   // v7.23: eigen matchday-balk in PSV-rood. Staat vooraan, want een titel als
   // "Matchday PSV vs Sparta" matcht anders eerst op het losse woord psv.
   {re:/\bmatchday\b|wedstrijddag/i, gradStops:[[0,'#E4032B'],[0.50,'#C10A22'],[1,'#8A0716']],
@@ -1237,6 +1241,32 @@ function render(tSec){
 
     // v7.19: licht schaakbordraster bovenin de balk (Brabantse Vrienden-stijl).
     // Alleen in de bovenste helft, en het dooft naar beneden uit.
+    if(st && st.pattern === 'bavaria'){
+      // Beierse ruiten: een schaakbord dat 45 graden gedraaid staat. De dekking hangt
+      // af van hoe laag de ruit in de balk ligt, zodat de tekstzone rustig blijft.
+      ctx.save();
+      roundPoly(ctx, barPts, B*0.16);
+      ctx.clip();
+      const cell = B*0.26, bandH = B*0.38, R = Math.PI/4, S = Math.SQRT1_2;
+      const barW = (xRt + SL) - 282;
+      ctx.translate(282, y);
+      ctx.rotate(-R);
+      const n1 = Math.ceil((barW + B*2) / cell) + 4;
+      for(let gy = -n1; gy < n1; gy++){
+        for(let gx = -n1; gx < n1; gx++){
+          if(((gx + gy) % 2 + 2) % 2 !== 0) continue;
+          const rx = gx*cell + cell/2, ry = gy*cell + cell/2;
+          const bx = (rx + ry) * S, by = (ry - rx) * S;
+          if(bx < -cell || bx > barW + cell) continue;
+          if(by < -cell || by > bandH) continue;
+          const fade = Math.max(0, 1 - Math.max(0, by) / bandH);
+          if(fade <= 0.02) continue;
+          ctx.fillStyle = 'rgba(255,255,255,' + (0.72*fade).toFixed(3) + ')';
+          ctx.fillRect(gx*cell, gy*cell, cell, cell);
+        }
+      }
+      ctx.restore();
+    }
     if(st && st.pattern === 'blocks'){
       ctx.save();
       roundPoly(ctx, barPts, B*0.16);

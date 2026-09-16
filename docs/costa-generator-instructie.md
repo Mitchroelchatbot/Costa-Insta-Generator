@@ -25,6 +25,7 @@ Dus: **dag + datum**, de **titel tussen aanhalingstekens**, **met** wie er draai
 - Zet een woord tussen sterretjes voor **sierletters**: Thank God It's *Friday*.
 - **Headliner-DJ?** Zet 'm tussen dubbele sterretjes: `met **DJ Jordy Graat**` — groter, en breekt vanzelf over twee regels.
 - **Zelf een regel breken** in de DJ-naam: `met Mister // Costa`.
+- **Oranje speelt?** Typ **Nederland** of **Oranje** in de titel en de balk wordt oranje met de rood-wit-blauwe vlag bovenlangs en een voetbal erin: `Vrij 9-10 "Nederland - Duitsland" open 19:00 (Aftrap 20:45)`.
 - **Oktoberfest?** Typ **Oktoberfest** of **Oktoberfestival** in de titel: Beiers blauwe balk met witte ruiten langs de bovenrand. De rest van je titel blijft gewoon staan, dus "Costa Oktoberfestival 2026" komt er helemaal op.
 - **Matchday?** Typ **Matchday** in de titel en de balk wordt PSV-rood met het embleem in het midden: `Zon 13-9 Matchday 14:30 PSV vs Sparta open 12:00`. Op een avond waar PSV bijzaak is (bijvoorbeeld naast Costa op Stelz'n) blijft het embleem gewoon rechts staan.
 - **Geen DJ die avond?** Laat "met ..." dan gewoon weg. Het PSV-embleem en de aftraptijd worden dan automatisch groter, want er is ruimte over: `Don 10-9 "Costa op Stelz'n" (3 Stelz €10,-) + 18:45 PSV vs Sjachtar open 16:00`
